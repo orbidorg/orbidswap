@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react'
 import { FiX, FiPlus, FiArrowDown } from 'react-icons/fi'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useAccount, useReadContract, useWriteContract } from 'wagmi'
+import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { parseUnits, formatUnits } from 'viem'
+import { toast } from 'react-hot-toast'
 import { ERC20_ABI, ROUTER_ADDRESS, ROUTER_ABI, FACTORY_ADDRESS, FACTORY_ABI, PAIR_ABI, WETH_ADDRESS } from '../config/contracts'
 import { TokenSelectorModal } from './TokenSelectorModal'
 import { useDebounce } from '../hooks/useDebounce'
@@ -72,7 +73,21 @@ export function AddLiquidityModal({ isOpen, onClose }: AddLiquidityModalProps) {
         query: { enabled: !!address && tokenB && tokenB.symbol !== 'ETH' }
     })
 
-    const { writeContract, isPending } = useWriteContract()
+    const { writeContract, data: hash, isPending } = useWriteContract({
+        mutation: {
+            onSuccess: () => toast.success('Transaction submitted!'),
+            onError: (error) => toast.error(`Failed: ${error.message.slice(0, 50)}...`)
+        }
+    })
+
+    const { isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash })
+
+    useEffect(() => {
+        if (isConfirmed) {
+            toast.success('Liquidity added successfully!')
+            onClose()
+        }
+    }, [isConfirmed, onClose])
 
     const handleApprove = (token: any, amount: string) => {
         if (!token || !amount) return

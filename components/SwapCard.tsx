@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import { FiSettings, FiArrowDown, FiInfo } from 'react-icons/fi'
-import { useAccount, useConnect, useBalance, useReadContract, useWriteContract } from 'wagmi'
+import { useAccount, useConnect, useBalance, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { injected } from 'wagmi/connectors'
 import { formatUnits, parseUnits } from 'viem'
+import { toast } from 'react-hot-toast'
 import { ERC20_ABI, ROUTER_ADDRESS, ROUTER_ABI, WETH_ADDRESS } from '../config/contracts'
 import { TokenSelectorModal } from './TokenSelectorModal'
 import { SettingsModal } from './SettingsModal'
@@ -117,7 +118,28 @@ export function SwapCard() {
     })
 
     // Write Contract Hook
-    const { writeContract, isPending: isWritePending } = useWriteContract()
+    const { writeContract, data: hash, isPending: isWritePending } = useWriteContract({
+        mutation: {
+            onSuccess: () => {
+                toast.success('Transaction submitted!')
+            },
+            onError: (error) => {
+                toast.error(`Transaction failed: ${error.message.slice(0, 50)}...`)
+            }
+        }
+    })
+
+    const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+        hash,
+    })
+
+    useEffect(() => {
+        if (isConfirmed) {
+            toast.success('Swap successful!')
+            setSellAmount('')
+            setBuyAmount('')
+        }
+    }, [isConfirmed])
 
     const handleApprove = () => {
         if (!sellToken.address) return
@@ -128,6 +150,7 @@ export function SwapCard() {
             args: [ROUTER_ADDRESS as `0x${string}`, parseUnits(sellAmount, 18)],
         }, {
             onSuccess: () => {
+                toast.success('Approval submitted!')
                 setTimeout(refetchAllowance, 5000)
             }
         })
@@ -216,7 +239,7 @@ export function SwapCard() {
                 return (
                     <button
                         onClick={handleApprove}
-                        disabled={isWritePending}
+                        disabled={isWritePending || isConfirming}
                         className="w-full bg-[#4c82fb] hover:bg-[#3b66c9] text-white font-semibold text-xl py-4 rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {isWritePending ? 'Approving...' : `Approve ${sellToken.symbol}`}
@@ -228,10 +251,10 @@ export function SwapCard() {
         return (
             <button
                 onClick={handleSwap}
-                disabled={isWritePending}
+                disabled={isWritePending || isConfirming}
                 className="w-full bg-[#4c82fb] hover:bg-[#3b66c9] text-white font-semibold text-xl py-4 rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
-                {isWritePending ? 'Swapping...' : 'Swap'}
+                {isWritePending || isConfirming ? 'Swapping...' : 'Swap'}
             </button>
         )
     }
@@ -337,12 +360,12 @@ export function SwapCard() {
                         </div>
                     </div>
                 </div>
-
-                {/* Action Button */}
-                <div className="mt-2">
-                    {renderActionButton()}
-                </div>
             </motion.div>
+
+            {/* Action Button */}
+            <div className="mt-2">
+                {renderActionButton()}
+            </div>
 
             <TokenSelectorModal
                 isOpen={isTokenSelectorOpen}

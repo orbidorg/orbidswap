@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { FiX, FiArrowDown } from 'react-icons/fi'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useAccount, useReadContract, useWriteContract } from 'wagmi'
+import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { parseUnits, formatUnits } from 'viem'
+import { toast } from 'react-hot-toast'
 import { ERC20_ABI, ROUTER_ADDRESS, ROUTER_ABI, PAIR_ABI } from '../config/contracts'
 
 interface RemoveLiquidityModalProps {
@@ -37,7 +38,21 @@ export function RemoveLiquidityModal({ isOpen, onClose, pairAddress, tokenA, tok
         query: { enabled: !!address && !!pairAddress }
     })
 
-    const { writeContract, isPending } = useWriteContract()
+    const { writeContract, data: hash, isPending } = useWriteContract({
+        mutation: {
+            onSuccess: () => toast.success('Transaction submitted!'),
+            onError: (error) => toast.error(`Failed: ${error.message.slice(0, 50)}...`)
+        }
+    })
+
+    const { isSuccess: isConfirmed } = useWaitForTransactionReceipt({ hash })
+
+    useEffect(() => {
+        if (isConfirmed) {
+            toast.success('Liquidity removed successfully!')
+            onClose()
+        }
+    }, [isConfirmed, onClose])
 
     const handleApprove = () => {
         if (!lpBalance) return
