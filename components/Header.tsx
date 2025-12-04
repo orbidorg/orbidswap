@@ -2,39 +2,127 @@
 
 import { useAccount, useConnect, useDisconnect } from 'wagmi'
 import { injected } from 'wagmi/connectors'
+import { Search, Menu, X, ChevronDown } from 'lucide-react'
+import Link from 'next/link'
+import { useState } from 'react'
 
 export function Header() {
     const { address, isConnected } = useAccount()
     const { connect } = useConnect()
     const { disconnect } = useDisconnect()
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+    const navLinks = [
+        { name: 'Swap', href: '/' },
+        { name: 'Explore', href: '/explore' },
+        { name: 'Pool', href: '/pool' },
+    ]
 
     return (
-        <header className="flex justify-between items-center p-4 border-b border-gray-800 bg-black text-white">
-            <div className="text-xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
-                OrbIdSwap
-            </div>
-            <div className="flex gap-4">
-                {isConnected ? (
-                    <div className="flex items-center gap-4">
-                        <span className="text-sm text-gray-400">
-                            {address?.slice(0, 6)}...{address?.slice(-4)}
-                        </span>
-                        <button
-                            onClick={() => disconnect()}
-                            className="px-4 py-2 text-sm font-medium text-red-400 hover:text-red-300 transition-colors"
+        <header className="sticky top-0 z-50 flex items-center justify-between px-4 py-3 bg-[#0d111c] border-b border-[#293249]">
+            {/* Left: Logo & Nav */}
+            <div className="flex items-center gap-8">
+                <Link href="/" className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-violet-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                        O
+                    </div>
+                    <span className="text-xl font-bold text-white hidden sm:block">OrbIdSwap</span>
+                </Link>
+
+                {/* Desktop Nav */}
+                <nav className="hidden md:flex items-center gap-6">
+                    {navLinks.map((link) => (
+                        <Link
+                            key={link.name}
+                            href={link.href}
+                            className="text-[#98a1c0] hover:text-white font-medium transition-colors"
                         >
-                            Disconnect
-                        </button>
+                            {link.name}
+                        </Link>
+                    ))}
+                </nav>
+            </div>
+
+            {/* Center: Search (Desktop) */}
+            <div className="hidden md:flex flex-1 max-w-md mx-4">
+                <div className="relative w-full group">
+                    <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-[#98a1c0] group-focus-within:text-white">
+                        <Search size={18} />
+                    </div>
+                    <input
+                        type="text"
+                        placeholder="Search tokens and pools"
+                        className="w-full bg-[#131a2a] border border-[#293249] rounded-xl py-2.5 pl-10 pr-4 text-white placeholder-[#98a1c0] focus:outline-none focus:border-[#4c82fb] focus:ring-1 focus:ring-[#4c82fb] transition-all"
+                    />
+                    <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                        <span className="bg-[#293249] text-[#98a1c0] text-xs px-1.5 py-0.5 rounded">/</span>
+                    </div>
+                </div>
+            </div>
+
+            {/* Right: Wallet & Mobile Menu */}
+            <div className="flex items-center gap-3">
+                {/* Network Selector (Static for now) */}
+                <div className="hidden sm:flex items-center gap-2 bg-[#131a2a] hover:bg-[#293249] px-3 py-2 rounded-xl cursor-pointer transition-colors">
+                    <div className="w-5 h-5 rounded-full bg-blue-500"></div>
+                    <ChevronDown size={16} className="text-[#98a1c0]" />
+                </div>
+
+                {isConnected ? (
+                    <div className="flex items-center gap-2 bg-[#131a2a] rounded-xl p-1 pr-3 border border-[#293249]">
+                        <div className="px-2 py-1 bg-[#293249] rounded-lg text-sm font-medium">
+                            0.00 ETH
+                        </div>
+                        <div className="flex items-center gap-2 cursor-pointer hover:opacity-80" onClick={() => disconnect()}>
+                            <span className="text-sm font-medium">
+                                {address?.slice(0, 6)}...{address?.slice(-4)}
+                            </span>
+                            <div className="w-4 h-4 rounded-full bg-gradient-to-r from-pink-500 to-violet-500"></div>
+                        </div>
                     </div>
                 ) : (
                     <button
                         onClick={() => connect({ connector: injected() })}
-                        className="px-4 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-500 rounded-lg transition-colors"
+                        className="px-4 py-2 bg-[#4c82fb]/10 hover:bg-[#4c82fb]/20 text-[#4c82fb] font-semibold rounded-xl transition-colors"
                     >
-                        Connect Wallet
+                        Connect
                     </button>
                 )}
+
+                {/* Mobile Menu Button */}
+                <button
+                    className="md:hidden p-2 text-[#98a1c0] hover:text-white"
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                >
+                    {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
             </div>
+
+            {/* Mobile Menu Overlay */}
+            {isMobileMenuOpen && (
+                <div className="absolute top-full left-0 right-0 bg-[#0d111c] border-b border-[#293249] p-4 md:hidden flex flex-col gap-4 shadow-xl">
+                    {navLinks.map((link) => (
+                        <Link
+                            key={link.name}
+                            href={link.href}
+                            className="text-[#98a1c0] hover:text-white font-medium py-2"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                            {link.name}
+                        </Link>
+                    ))}
+                    <div className="relative w-full">
+                        <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-[#98a1c0]">
+                            <Search size={18} />
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Search tokens"
+                            className="w-full bg-[#131a2a] border border-[#293249] rounded-xl py-2.5 pl-10 pr-4 text-white placeholder-[#98a1c0] focus:outline-none focus:border-[#4c82fb]"
+                        />
+                    </div>
+                </div>
+            )}
         </header>
     )
 }
