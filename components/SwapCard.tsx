@@ -27,7 +27,7 @@ export function SwapCard() {
     const [selectorMode, setSelectorMode] = useState<'sell' | 'buy'>('sell')
 
     // Tokens State
-    const [sellToken, setSellToken] = useState({ symbol: 'ETH', name: 'Ether', address: '0x0000000000000000000000000000000000000000' })
+    const [sellToken, setSellToken] = useState({ symbol: 'WLD', name: 'Worldcoin', address: '0x0000000000000000000000000000000000000000' })
     const [buyToken, setBuyToken] = useState<null | { symbol: string, name: string, address: string }>(null)
 
     // ETH Balance
@@ -40,7 +40,7 @@ export function SwapCard() {
         functionName: 'balanceOf',
         args: address ? [address] : undefined,
         query: {
-            enabled: !!address && sellToken.symbol !== 'ETH',
+            enabled: !!address && sellToken.symbol !== 'WLD',
         }
     })
 
@@ -51,14 +51,14 @@ export function SwapCard() {
         functionName: 'balanceOf',
         args: address ? [address] : undefined,
         query: {
-            enabled: !!address && !!buyToken && buyToken.symbol !== 'ETH',
+            enabled: !!address && !!buyToken && buyToken.symbol !== 'WLD',
         }
     })
 
     // Helper to get formatted balance
     const getBalance = (token: { symbol: string } | null, isEthBalance: any, tokenBalance: any) => {
         if (!token) return '0.00'
-        if (token.symbol === 'ETH') {
+        if (token.symbol === 'WLD') {
             return isEthBalance ? formatUnits(isEthBalance.value, isEthBalance.decimals) : '0.00'
         }
         return tokenBalance ? formatUnits(tokenBalance, 18) : '0.00' // Assuming 18 decimals for now
@@ -70,8 +70,8 @@ export function SwapCard() {
     const getPath = () => {
         if (!sellToken || !buyToken) return undefined
 
-        const sellAddress = sellToken.symbol === 'ETH' ? WETH_ADDRESS : sellToken.address
-        const buyAddress = buyToken.symbol === 'ETH' ? WETH_ADDRESS : buyToken.address
+        const sellAddress = sellToken.symbol === 'WLD' ? WETH_ADDRESS : sellToken.address
+        const buyAddress = buyToken.symbol === 'WLD' ? WETH_ADDRESS : buyToken.address
 
         if (sellAddress === buyAddress) return undefined
 
@@ -115,7 +115,7 @@ export function SwapCard() {
         functionName: 'allowance',
         args: address ? [address, ROUTER_ADDRESS as `0x${string}`] : undefined,
         query: {
-            enabled: !!address && sellToken.symbol !== 'ETH',
+            enabled: !!address && sellToken.symbol !== 'WLD',
         }
     })
 
@@ -174,7 +174,7 @@ export function SwapCard() {
 
         const deadlineTimestamp = BigInt(Math.floor(Date.now() / 1000) + 60 * parseInt(deadline))
 
-        if (sellToken.symbol === 'ETH') {
+        if (sellToken.symbol === 'WLD') {
             writeContract({
                 address: ROUTER_ADDRESS as `0x${string}`,
                 abi: ROUTER_ABI,
@@ -182,7 +182,7 @@ export function SwapCard() {
                 args: [amountOutMin, path, address, deadlineTimestamp],
                 value: amountIn,
             })
-        } else if (buyToken?.symbol === 'ETH') {
+        } else if (buyToken?.symbol === 'WLD') {
             writeContract({
                 address: ROUTER_ADDRESS as `0x${string}`,
                 abi: ROUTER_ABI,
@@ -242,7 +242,7 @@ export function SwapCard() {
         }
 
         // Check Allowance for ERC20
-        if (sellToken.symbol !== 'ETH') {
+        if (sellToken.symbol !== 'WLD') {
             const currentAllowance = allowance ? allowance as bigint : 0n
             const amountToSell = parseUnits(sellAmount, 18)
 

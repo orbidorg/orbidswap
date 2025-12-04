@@ -35,7 +35,7 @@ export function UserWalletPanel() {
                 <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500" />
                 <span className="text-white font-medium">{shortAddress}</span>
                 <span className="text-[#98a1c0] hidden sm:block">
-                    {balance ? `${parseFloat(formatUnits(balance.value, balance.decimals)).toFixed(4)} ${balance.symbol}` : '...'}
+                    {balance ? `${parseFloat(formatUnits(balance.value, balance.decimals)).toFixed(4)} WLD` : '...'}
                 </span>
             </button>
 
@@ -59,7 +59,7 @@ export function UserWalletPanel() {
                             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 mb-3" />
                             <div className="text-white font-bold text-xl">{shortAddress}</div>
                             <div className="text-[#98a1c0]">
-                                {balance ? `${parseFloat(formatUnits(balance.value, balance.decimals)).toFixed(4)} ${balance.symbol}` : '...'}
+                                {balance ? `${parseFloat(formatUnits(balance.value, balance.decimals)).toFixed(4)} WLD` : '...'}
                             </div>
                         </div>
 

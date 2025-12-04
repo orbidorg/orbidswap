@@ -9,7 +9,7 @@ interface TokenSelectorModalProps {
 }
 
 const COMMON_TOKENS = [
-    { symbol: 'ETH', name: 'Ether', address: '0x0000000000000000000000000000000000000000' },
+    { symbol: 'WLD', name: 'Worldcoin', address: '0x0000000000000000000000000000000000000000' },
     { symbol: 'WETH', name: 'Wrapped Ether', address: '0xdBd74deF5339C659719Afd3f533412b5de4D3736' },
     { symbol: 'USDC', name: 'USD Coin', address: '0x...' }, // Placeholder
     { symbol: 'DAI', name: 'Dai Stablecoin', address: '0x...' }, // Placeholder

@@ -17,7 +17,7 @@ interface AddLiquidityModalProps {
 
 export function AddLiquidityModal({ isOpen, onClose }: AddLiquidityModalProps) {
     const { address } = useAccount()
-    const [tokenA, setTokenA] = useState<any>({ symbol: 'ETH', name: 'Ether', address: '0x0000000000000000000000000000000000000000' })
+    const [tokenA, setTokenA] = useState<any>({ symbol: 'WLD', name: 'Worldcoin', address: '0x0000000000000000000000000000000000000000' })
     const [tokenB, setTokenB] = useState<any>(null)
     const [amountA, setAmountA] = useState('')
     const [amountB, setAmountB] = useState('')
@@ -31,8 +31,8 @@ export function AddLiquidityModal({ isOpen, onClose }: AddLiquidityModalProps) {
         abi: FACTORY_ABI,
         functionName: 'getPair',
         args: tokenA && tokenB ? [
-            tokenA.symbol === 'ETH' ? WETH_ADDRESS : tokenA.address,
-            tokenB.symbol === 'ETH' ? WETH_ADDRESS : tokenB.address
+            tokenA.symbol === 'WLD' ? WETH_ADDRESS : tokenA.address,
+            tokenB.symbol === 'WLD' ? WETH_ADDRESS : tokenB.address
         ] : undefined,
         query: {
             enabled: !!tokenA && !!tokenB,
@@ -62,7 +62,7 @@ export function AddLiquidityModal({ isOpen, onClose }: AddLiquidityModalProps) {
         abi: ERC20_ABI,
         functionName: 'allowance',
         args: address ? [address, ROUTER_ADDRESS as `0x${string}`] : undefined,
-        query: { enabled: !!address && tokenA && tokenA.symbol !== 'ETH' }
+        query: { enabled: !!address && tokenA && tokenA.symbol !== 'WLD' }
     })
 
     const { data: allowanceB } = useReadContract({
@@ -70,7 +70,7 @@ export function AddLiquidityModal({ isOpen, onClose }: AddLiquidityModalProps) {
         abi: ERC20_ABI,
         functionName: 'allowance',
         args: address ? [address, ROUTER_ADDRESS as `0x${string}`] : undefined,
-        query: { enabled: !!address && tokenB && tokenB.symbol !== 'ETH' }
+        query: { enabled: !!address && tokenB && tokenB.symbol !== 'WLD' }
     })
 
     const { writeContract, data: hash, isPending } = useWriteContract({
@@ -106,7 +106,7 @@ export function AddLiquidityModal({ isOpen, onClose }: AddLiquidityModalProps) {
         const parsedAmountB = parseUnits(amountB, 18)
         const deadline = BigInt(Math.floor(Date.now() / 1000) + 60 * 20)
 
-        if (tokenA.symbol === 'ETH') {
+        if (tokenA.symbol === 'WLD') {
             writeContract({
                 address: ROUTER_ADDRESS as `0x${string}`,
                 abi: ROUTER_ABI,
@@ -121,7 +121,7 @@ export function AddLiquidityModal({ isOpen, onClose }: AddLiquidityModalProps) {
                 ],
                 value: parsedAmountA,
             })
-        } else if (tokenB.symbol === 'ETH') {
+        } else if (tokenB.symbol === 'WLD') {
             writeContract({
                 address: ROUTER_ADDRESS as `0x${string}`,
                 abi: ROUTER_ABI,

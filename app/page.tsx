@@ -124,8 +124,8 @@ export default function LandingPage() {
             <div className="text-3xl font-bold text-white">{allPairsLength ? allPairsLength.toString() : '0'}</div>
           </div>
           <div className="bg-[#131a2a]/50 backdrop-blur-md border border-[#293249] p-6 rounded-3xl">
-            <div className="text-[#98a1c0] text-sm font-medium mb-1">Tracked Liquidity (ETH)</div>
-            <div className="text-3xl font-bold text-white">{tvlEth} ETH</div>
+            <div className="text-[#98a1c0] text-sm font-medium mb-1">Tracked Liquidity (WLD)</div>
+            <div className="text-3xl font-bold text-white">{tvlEth} WLD</div>
           </div>
           <div className="bg-[#131a2a]/50 backdrop-blur-md border border-[#293249] p-6 rounded-3xl">
             <div className="text-[#98a1c0] text-sm font-medium mb-1">Current Gas</div>
