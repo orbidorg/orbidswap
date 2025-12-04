@@ -1,6 +1,80 @@
+'use client'
+
 import { Header } from '../../components/Header'
+import { useReadContract, useReadContracts } from 'wagmi'
+import { FACTORY_ADDRESS, FACTORY_ABI, PAIR_ABI } from '../../config/contracts'
+import { formatUnits } from 'viem'
+import { useEffect, useState } from 'react'
 
 export default function Explore() {
+    const [pools, setPools] = useState<any[]>([])
+
+    // 1. Get total pairs length
+    const { data: allPairsLength } = useReadContract({
+        address: FACTORY_ADDRESS as `0x${string}`,
+        abi: FACTORY_ABI,
+        functionName: 'allPairsLength',
+    })
+
+    // 2. Prepare hooks to fetch first 10 pairs
+    const pairsCount = allPairsLength ? Number(allPairsLength) : 0
+    const pairsToFetch = Math.min(pairsCount, 10)
+    const pairIndexes = Array.from({ length: pairsToFetch }, (_, i) => BigInt(i))
+
+    const { data: pairAddresses } = useReadContracts({
+        contracts: pairIndexes.map(index => ({
+            address: FACTORY_ADDRESS as `0x${string}`,
+            abi: FACTORY_ABI,
+            functionName: 'allPairs',
+            args: [index],
+        }))
+    })
+
+    // 3. Fetch data for these pairs
+    const { data: pairsData } = useReadContracts({
+        contracts: pairAddresses?.flatMap(result => {
+            const pairAddress = result.result as unknown as `0x${string}`
+            if (!pairAddress) return []
+            return [
+                { address: pairAddress, abi: PAIR_ABI, functionName: 'token0' },
+                { address: pairAddress, abi: PAIR_ABI, functionName: 'token1' },
+                { address: pairAddress, abi: PAIR_ABI, functionName: 'getReserves' },
+            ]
+        }) || [],
+        query: {
+            enabled: !!pairAddresses
+        }
+    })
+
+    useEffect(() => {
+        if (!pairsData || !pairAddresses) return
+
+        const processPools = () => {
+            const loadedPools: any[] = []
+
+            for (let i = 0; i < pairAddresses.length; i++) {
+                const baseIndex = i * 3
+                const pairAddress = pairAddresses[i].result as unknown as string
+                const token0 = pairsData[baseIndex]?.result as unknown as string
+                const token1 = pairsData[baseIndex + 1]?.result as unknown as string
+                const reserves = pairsData[baseIndex + 2]?.result as unknown as [bigint, bigint, number]
+
+                if (pairAddress && token0 && token1 && reserves) {
+                    loadedPools.push({
+                        address: pairAddress,
+                        token0,
+                        token1,
+                        reserve0: formatUnits(reserves[0], 18), // Assuming 18 decimals for simplicity
+                        reserve1: formatUnits(reserves[1], 18),
+                    })
+                }
+            }
+            setPools(loadedPools)
+        }
+
+        processPools()
+    }, [pairsData, pairAddresses])
+
     return (
         <div className="min-h-screen bg-[#0d111c] text-white font-sans selection:bg-[#4c82fb] selection:text-white">
             <Header />
@@ -8,54 +82,44 @@ export default function Explore() {
                 <div className="w-full max-w-4xl">
                     <h1 className="text-4xl font-bold mb-8">Explore</h1>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Top Tokens */}
-                        <div className="bg-[#131a2a] rounded-3xl p-6 border border-[#293249]">
-                            <h2 className="text-xl font-bold mb-4">Top Tokens</h2>
-                            <div className="space-y-4">
-                                {[1, 2, 3, 4, 5].map((i) => (
-                                    <div key={i} className="flex items-center justify-between p-2 hover:bg-[#293249]/50 rounded-xl cursor-pointer transition-colors">
-                                        <div className="flex items-center gap-3">
-                                            <span className="text-[#98a1c0] w-4">{i}</span>
-                                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500"></div>
-                                            <div>
-                                                <div className="font-medium">Token Name</div>
-                                                <div className="text-[#98a1c0] text-xs">TKN</div>
-                                            </div>
-                                        </div>
-                                        <div className="text-right">
-                                            <div>$123.45</div>
-                                            <div className="text-green-500 text-xs">+1.2%</div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
+                    <div className="grid grid-cols-1 gap-6">
                         {/* Top Pools */}
                         <div className="bg-[#131a2a] rounded-3xl p-6 border border-[#293249]">
-                            <h2 className="text-xl font-bold mb-4">Top Pools</h2>
-                            <div className="space-y-4">
-                                {[1, 2, 3, 4, 5].map((i) => (
-                                    <div key={i} className="flex items-center justify-between p-2 hover:bg-[#293249]/50 rounded-xl cursor-pointer transition-colors">
-                                        <div className="flex items-center gap-3">
-                                            <span className="text-[#98a1c0] w-4">{i}</span>
-                                            <div className="flex -space-x-2">
-                                                <div className="w-8 h-8 rounded-full bg-blue-500 border-2 border-[#131a2a]"></div>
-                                                <div className="w-8 h-8 rounded-full bg-purple-500 border-2 border-[#131a2a]"></div>
+                            <h2 className="text-xl font-bold mb-4">All Pools</h2>
+                            {pools.length === 0 ? (
+                                <div className="text-center py-8 text-[#98a1c0]">
+                                    {pairsCount === 0 ? "No pools found." : "Loading pools..."}
+                                </div>
+                            ) : (
+                                <div className="space-y-4">
+                                    {pools.map((pool, i) => (
+                                        <div key={i} className="flex items-center justify-between p-4 hover:bg-[#293249]/50 rounded-xl cursor-pointer transition-colors border border-transparent hover:border-[#4c82fb]/30">
+                                            <div className="flex items-center gap-4">
+                                                <span className="text-[#98a1c0] w-6 font-mono">#{i + 1}</span>
+                                                <div className="flex -space-x-2">
+                                                    <div className="w-10 h-10 rounded-full bg-blue-500 border-2 border-[#131a2a]"></div>
+                                                    <div className="w-10 h-10 rounded-full bg-purple-500 border-2 border-[#131a2a]"></div>
+                                                </div>
+                                                <div>
+                                                    <div className="font-bold text-lg">Pool {pool.address.slice(0, 6)}...{pool.address.slice(-4)}</div>
+                                                    <div className="text-[#98a1c0] text-sm font-mono">
+                                                        {pool.token0.slice(0, 6)}... / {pool.token1.slice(0, 6)}...
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <div className="font-medium">ETH/USDC</div>
-                                                <div className="text-[#98a1c0] text-xs">$1.2M TVL</div>
+                                            <div className="text-right">
+                                                <div className="text-[#98a1c0] text-xs uppercase tracking-wider mb-1">Reserves</div>
+                                                <div className="font-mono text-sm">
+                                                    {parseFloat(pool.reserve0).toFixed(2)} <span className="text-[#5d6785]">TKN0</span>
+                                                </div>
+                                                <div className="font-mono text-sm">
+                                                    {parseFloat(pool.reserve1).toFixed(2)} <span className="text-[#5d6785]">TKN1</span>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className="text-right">
-                                            <div>$45.2k</div>
-                                            <div className="text-[#98a1c0] text-xs">24h Vol</div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
