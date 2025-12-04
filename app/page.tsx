@@ -8,6 +8,7 @@ import { useReadContract, useReadContracts, useGasPrice } from 'wagmi'
 import { FACTORY_ADDRESS, FACTORY_ABI, PAIR_ABI, WETH_ADDRESS } from '@/config/contracts'
 import { formatUnits } from 'viem'
 import { useEffect, useState } from 'react'
+import { Footer } from '@/components/Footer'
 
 export default function LandingPage() {
   const [tvlEth, setTvlEth] = useState('0')
@@ -158,6 +159,7 @@ export default function LandingPage() {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   )
 }
