@@ -13,7 +13,7 @@ export function Header() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
     const navLinks = [
-        { name: 'Swap', href: '/' },
+        { name: 'Swap', href: '/swap' },
         { name: 'Explore', href: '/explore' },
         { name: 'Pool', href: '/pool' },
     ]
