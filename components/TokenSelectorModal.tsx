@@ -1,6 +1,6 @@
 'use client'
 
-import { Search, X } from 'lucide-react'
+import { FiSearch, FiX } from 'react-icons/fi'
 import { useState } from 'react'
 
 interface Token {
@@ -41,14 +41,14 @@ export function TokenSelectorModal({ isOpen, onClose, onSelect }: TokenSelectorM
                     <div className="flex justify-between items-center mb-4">
                         <h3 className="text-white font-medium text-lg">Select a token</h3>
                         <button onClick={onClose} className="text-[#98a1c0] hover:text-white transition-colors">
-                            <X size={24} />
+                            <FiX size={24} />
                         </button>
                     </div>
 
                     {/* Search */}
                     <div className="relative mb-4">
                         <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-[#98a1c0]">
-                            <Search size={20} />
+                            <FiSearch size={20} />
                         </div>
                         <input
                             type="text"

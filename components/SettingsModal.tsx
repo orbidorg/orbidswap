@@ -1,6 +1,6 @@
 'use client'
 
-import { X, Info } from 'lucide-react'
+import { FiX, FiInfo } from 'react-icons/fi'
 import { useState } from 'react'
 
 interface SettingsModalProps {
@@ -20,7 +20,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 <div className="flex justify-between items-center mb-6">
                     <h3 className="text-white font-medium text-lg">Settings</h3>
                     <button onClick={onClose} className="text-[#98a1c0] hover:text-white transition-colors">
-                        <X size={24} />
+                        <FiX size={24} />
                     </button>
                 </div>
 
@@ -28,14 +28,14 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 <div className="mb-6">
                     <div className="flex items-center gap-2 mb-3">
                         <span className="text-[#98a1c0] font-medium">Max. slippage</span>
-                        <Info size={14} className="text-[#5d6785]" />
+                        <FiInfo size={14} className="text-[#5d6785]" />
                     </div>
                     <div className="flex gap-2">
                         <button
                             onClick={() => setSlippage('auto')}
                             className={`px-4 py-2 rounded-xl font-medium transition-colors ${slippage === 'auto'
-                                    ? 'bg-[#4c82fb] text-white'
-                                    : 'bg-[#131a2a] text-[#98a1c0] hover:bg-[#293249]'
+                                ? 'bg-[#4c82fb] text-white'
+                                : 'bg-[#131a2a] text-[#98a1c0] hover:bg-[#293249]'
                                 }`}
                         >
                             Auto
@@ -57,7 +57,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 <div>
                     <div className="flex items-center gap-2 mb-3">
                         <span className="text-[#98a1c0] font-medium">Transaction deadline</span>
-                        <Info size={14} className="text-[#5d6785]" />
+                        <FiInfo size={14} className="text-[#5d6785]" />
                     </div>
                     <div className="flex items-center gap-3">
                         <div className="w-24 flex items-center bg-[#131a2a] border border-[#293249] rounded-xl px-3 py-2 focus-within:border-[#4c82fb] transition-colors">

@@ -2,7 +2,7 @@
 
 import { useAccount, useConnect, useDisconnect } from 'wagmi'
 import { injected } from 'wagmi/connectors'
-import { Search, Menu, X, ChevronDown } from 'lucide-react'
+import { FiSearch, FiMenu, FiX, FiChevronDown } from 'react-icons/fi'
 import Link from 'next/link'
 import { useState } from 'react'
 
@@ -47,7 +47,7 @@ export function Header() {
             <div className="hidden md:flex flex-1 max-w-md mx-4">
                 <div className="relative w-full group">
                     <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-[#98a1c0] group-focus-within:text-white">
-                        <Search size={18} />
+                        <FiSearch size={18} />
                     </div>
                     <input
                         type="text"
@@ -65,7 +65,7 @@ export function Header() {
                 {/* Network Selector (Static for now) */}
                 <div className="hidden sm:flex items-center gap-2 bg-[#131a2a] hover:bg-[#293249] px-3 py-2 rounded-xl cursor-pointer transition-colors">
                     <div className="w-5 h-5 rounded-full bg-blue-500"></div>
-                    <ChevronDown size={16} className="text-[#98a1c0]" />
+                    <FiChevronDown size={16} className="text-[#98a1c0]" />
                 </div>
 
                 {isConnected ? (
@@ -94,7 +94,7 @@ export function Header() {
                     className="md:hidden p-2 text-[#98a1c0] hover:text-white"
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 >
-                    {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                    {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
                 </button>
             </div>
 
@@ -113,7 +113,7 @@ export function Header() {
                     ))}
                     <div className="relative w-full">
                         <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-[#98a1c0]">
-                            <Search size={18} />
+                            <FiSearch size={18} />
                         </div>
                         <input
                             type="text"

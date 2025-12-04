@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Settings, ArrowDown, Info } from 'lucide-react'
+import { FiSettings, FiArrowDown, FiInfo } from 'react-icons/fi'
 import { useAccount, useConnect } from 'wagmi'
 import { injected } from 'wagmi/connectors'
 import { TokenSelectorModal } from './TokenSelectorModal'
@@ -49,7 +49,7 @@ export function SwapCard() {
                         onClick={() => setIsSettingsOpen(true)}
                         className="text-[#98a1c0] hover:text-white transition-colors"
                     >
-                        <Settings size={20} />
+                        <FiSettings size={20} />
                     </button>
                 </div>
 
@@ -76,7 +76,7 @@ export function SwapCard() {
                                     {sellToken.symbol[0]}
                                 </div>
                                 <span className="font-semibold text-lg">{sellToken.symbol}</span>
-                                <ArrowDown size={16} />
+                                <FiArrowDown size={16} />
                             </button>
                         </div>
                         <div className="flex justify-between mt-2">
@@ -88,7 +88,7 @@ export function SwapCard() {
                     {/* Arrow Separator */}
                     <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
                         <div className="bg-[#131a2a] p-1.5 rounded-xl border-[4px] border-[#0d111c]">
-                            <ArrowDown size={20} className="text-[#98a1c0]" />
+                            <FiArrowDown size={20} className="text-[#98a1c0]" />
                         </div>
                     </div>
 
@@ -114,7 +114,7 @@ export function SwapCard() {
                                         {buyToken.symbol[0]}
                                     </div>
                                     <span className="font-semibold text-lg">{buyToken.symbol}</span>
-                                    <ArrowDown size={16} />
+                                    <FiArrowDown size={16} />
                                 </button>
                             ) : (
                                 <button
@@ -122,7 +122,7 @@ export function SwapCard() {
                                     className="flex items-center gap-2 bg-[#4c82fb] hover:bg-[#3b66c9] text-white px-3 py-1.5 rounded-full transition-colors shrink-0 shadow-lg shadow-blue-500/20"
                                 >
                                     <span className="font-semibold text-lg">Select token</span>
-                                    <ArrowDown size={16} />
+                                    <FiArrowDown size={16} />
                                 </button>
                             )}
                         </div>
