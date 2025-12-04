@@ -4,8 +4,76 @@ import { Header } from '@/components/Header'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { FiArrowRight, FiZap, FiShield, FiTrendingUp } from 'react-icons/fi'
+import { useReadContract, useReadContracts, useGasPrice } from 'wagmi'
+import { FACTORY_ADDRESS, FACTORY_ABI, PAIR_ABI, WETH_ADDRESS } from '@/config/contracts'
+import { formatUnits } from 'viem'
+import { useEffect, useState } from 'react'
 
 export default function LandingPage() {
+  const [tvlEth, setTvlEth] = useState('0')
+
+  // 1. Total Pairs
+  const { data: allPairsLength } = useReadContract({
+    address: FACTORY_ADDRESS as `0x${string}`,
+    abi: FACTORY_ABI,
+    functionName: 'allPairsLength',
+  })
+
+  // 2. Gas Price
+  const { data: gasPrice } = useGasPrice()
+
+  // 3. Calculate TVL (Approx from first 10 pairs)
+  const pairsCount = allPairsLength ? Number(allPairsLength) : 0
+  const pairsToFetch = Math.min(pairsCount, 10)
+  const pairIndexes = Array.from({ length: pairsToFetch }, (_, i) => BigInt(i))
+
+  const { data: pairAddresses } = useReadContracts({
+    contracts: pairIndexes.map(index => ({
+      address: FACTORY_ADDRESS as `0x${string}`,
+      abi: FACTORY_ABI,
+      functionName: 'allPairs',
+      args: [index],
+    }))
+  })
+
+  const { data: pairsData } = useReadContracts({
+    contracts: pairAddresses?.flatMap(result => {
+      const pairAddress = result.result as unknown as `0x${string}`
+      if (!pairAddress) return []
+      return [
+        { address: pairAddress, abi: PAIR_ABI, functionName: 'token0' },
+        { address: pairAddress, abi: PAIR_ABI, functionName: 'token1' },
+        { address: pairAddress, abi: PAIR_ABI, functionName: 'getReserves' },
+      ]
+    }) || [],
+    query: {
+      enabled: !!pairAddresses
+    }
+  })
+
+  useEffect(() => {
+    if (!pairsData || !pairAddresses) return
+
+    let totalEth = 0
+
+    for (let i = 0; i < pairAddresses.length; i++) {
+      const baseIndex = i * 3
+      const token0 = pairsData[baseIndex]?.result as unknown as string
+      const token1 = pairsData[baseIndex + 1]?.result as unknown as string
+      const reserves = pairsData[baseIndex + 2]?.result as unknown as [bigint, bigint, number]
+
+      if (token0 && token1 && reserves) {
+        // Check if one of the tokens is WETH
+        if (token0.toLowerCase() === WETH_ADDRESS.toLowerCase()) {
+          totalEth += Number(formatUnits(reserves[0], 18)) * 2
+        } else if (token1.toLowerCase() === WETH_ADDRESS.toLowerCase()) {
+          totalEth += Number(formatUnits(reserves[1], 18)) * 2
+        }
+      }
+    }
+    setTvlEth(totalEth.toFixed(2))
+  }, [pairsData, pairAddresses])
+
   return (
     <div className="min-h-screen bg-[#0d111c] text-white font-sans selection:bg-[#4c82fb] selection:text-white overflow-hidden">
       <Header />
@@ -52,16 +120,16 @@ export default function LandingPage() {
           className="mt-24 grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-4xl"
         >
           <div className="bg-[#131a2a]/50 backdrop-blur-md border border-[#293249] p-6 rounded-3xl">
-            <div className="text-[#98a1c0] text-sm font-medium mb-1">Total Value Locked</div>
-            <div className="text-3xl font-bold text-white">$1.2M+</div>
-          </div>
-          <div className="bg-[#131a2a]/50 backdrop-blur-md border border-[#293249] p-6 rounded-3xl">
-            <div className="text-[#98a1c0] text-sm font-medium mb-1">Total Volume</div>
-            <div className="text-3xl font-bold text-white">$450K+</div>
-          </div>
-          <div className="bg-[#131a2a]/50 backdrop-blur-md border border-[#293249] p-6 rounded-3xl">
             <div className="text-[#98a1c0] text-sm font-medium mb-1">Total Pairs</div>
-            <div className="text-3xl font-bold text-white">150+</div>
+            <div className="text-3xl font-bold text-white">{allPairsLength ? allPairsLength.toString() : '0'}</div>
+          </div>
+          <div className="bg-[#131a2a]/50 backdrop-blur-md border border-[#293249] p-6 rounded-3xl">
+            <div className="text-[#98a1c0] text-sm font-medium mb-1">Tracked Liquidity (ETH)</div>
+            <div className="text-3xl font-bold text-white">{tvlEth} ETH</div>
+          </div>
+          <div className="bg-[#131a2a]/50 backdrop-blur-md border border-[#293249] p-6 rounded-3xl">
+            <div className="text-[#98a1c0] text-sm font-medium mb-1">Current Gas</div>
+            <div className="text-3xl font-bold text-white">{gasPrice ? formatUnits(gasPrice, 9).slice(0, 4) : '0'} Gwei</div>
           </div>
         </motion.div>
 
