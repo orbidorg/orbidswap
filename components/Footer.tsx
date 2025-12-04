@@ -6,71 +6,70 @@ import { FaDiscord } from 'react-icons/fa'
 
 export function Footer() {
     return (
-        <footer className="bg-white dark:bg-[#0d111c] border-t border-gray-200 dark:border-[#293249] py-16 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+        <footer className="bg-white dark:bg-[#0d111c] border-t border-gray-200 dark:border-[#293249] pt-20 pb-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-12">
                 {/* Brand Column */}
-                <div className="flex flex-col gap-4">
+                <div className="md:col-span-2 flex flex-col gap-6">
                     <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-violet-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                        <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-violet-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">
                             O
                         </div>
-                        <span className="text-xl font-bold text-gray-900 dark:text-white">OrbIdSwap</span>
+                        <span className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">OrbIdSwap</span>
                     </div>
-                    <p className="text-gray-500 dark:text-[#98a1c0] text-sm leading-relaxed">
-                        The most intuitive DEX on World Chain. Swap, earn, and build on the future of decentralized finance.
+                    <p className="text-gray-500 dark:text-[#98a1c0] text-sm leading-relaxed max-w-sm">
+                        The native liquidity layer for World Chain. <br />
+                        Empowering the next generation of human-centric DeFi.
                     </p>
-                    <div className="flex gap-4 mt-2">
-                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 dark:text-[#98a1c0] hover:text-gray-900 dark:hover:text-white transition-colors">
-                            <FiTwitter size={20} />
+                    <div className="flex gap-4">
+                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gray-100 dark:bg-[#131a2a] flex items-center justify-center text-gray-500 dark:text-[#98a1c0] hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all">
+                            <FiTwitter size={18} />
                         </a>
-                        <a href="https://github.com/orbidorg/orbidswap" target="_blank" rel="noopener noreferrer" className="text-gray-400 dark:text-[#98a1c0] hover:text-gray-900 dark:hover:text-white transition-colors">
-                            <FiGithub size={20} />
+                        <a href="https://github.com/orbidorg/orbidswap" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gray-100 dark:bg-[#131a2a] flex items-center justify-center text-gray-500 dark:text-[#98a1c0] hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all">
+                            <FiGithub size={18} />
                         </a>
-                        <a href="https://discord.com" target="_blank" rel="noopener noreferrer" className="text-gray-400 dark:text-[#98a1c0] hover:text-gray-900 dark:hover:text-white transition-colors">
-                            <FaDiscord size={20} />
+                        <a href="https://discord.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gray-100 dark:bg-[#131a2a] flex items-center justify-center text-gray-500 dark:text-[#98a1c0] hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all">
+                            <FaDiscord size={18} />
                         </a>
                     </div>
                 </div>
 
-                {/* Ecosystem */}
+                {/* Links Columns */}
                 <div>
-                    <h3 className="text-gray-900 dark:text-white font-semibold mb-4">Ecosystem</h3>
-                    <ul className="flex flex-col gap-3 text-gray-500 dark:text-[#98a1c0] text-sm">
-                        <li><Link href="/swap" className="hover:text-[#4c82fb] transition-colors">Swap</Link></li>
-                        <li><Link href="/pool" className="hover:text-[#4c82fb] transition-colors">Pools</Link></li>
-                        <li><Link href="/explore" className="hover:text-[#4c82fb] transition-colors">Explore</Link></li>
-                        <li><a href="#" className="hover:text-[#4c82fb] transition-colors">Analytics</a></li>
+                    <h3 className="text-gray-900 dark:text-white font-semibold mb-6">Protocol</h3>
+                    <ul className="flex flex-col gap-4 text-gray-500 dark:text-[#98a1c0] text-sm">
+                        <li><Link href="/swap" className="hover:text-blue-500 transition-colors">Swap</Link></li>
+                        <li><Link href="/pool" className="hover:text-blue-500 transition-colors">Pools</Link></li>
+                        <li><Link href="/explore" className="hover:text-blue-500 transition-colors">Explore</Link></li>
+                        <li><a href="#" className="hover:text-blue-500 transition-colors">Analytics</a></li>
                     </ul>
                 </div>
 
-                {/* Developers */}
                 <div>
-                    <h3 className="text-gray-900 dark:text-white font-semibold mb-4">Developers</h3>
-                    <ul className="flex flex-col gap-3 text-gray-500 dark:text-[#98a1c0] text-sm">
-                        <li><a href="#" className="hover:text-[#4c82fb] transition-colors flex items-center gap-2">Documentation <FiBook size={14} /></a></li>
-                        <li><a href="#" className="hover:text-[#4c82fb] transition-colors">Github</a></li>
-                        <li><a href="#" className="hover:text-[#4c82fb] transition-colors">Audit</a></li>
-                        <li><a href="#" className="hover:text-[#4c82fb] transition-colors">Bug Bounty</a></li>
+                    <h3 className="text-gray-900 dark:text-white font-semibold mb-6">Developers</h3>
+                    <ul className="flex flex-col gap-4 text-gray-500 dark:text-[#98a1c0] text-sm">
+                        <li><a href="#" className="hover:text-blue-500 transition-colors flex items-center gap-2">Documentation <FiBook size={14} /></a></li>
+                        <li><a href="#" className="hover:text-blue-500 transition-colors">Github</a></li>
+                        <li><a href="#" className="hover:text-blue-500 transition-colors">Audit</a></li>
+                        <li><a href="#" className="hover:text-blue-500 transition-colors">Bug Bounty</a></li>
                     </ul>
                 </div>
 
-                {/* Support */}
                 <div>
-                    <h3 className="text-gray-900 dark:text-white font-semibold mb-4">Support</h3>
-                    <ul className="flex flex-col gap-3 text-gray-500 dark:text-[#98a1c0] text-sm">
-                        <li><a href="#" className="hover:text-[#4c82fb] transition-colors">Help Center</a></li>
-                        <li><a href="#" className="hover:text-[#4c82fb] transition-colors">Terms of Service</a></li>
-                        <li><a href="#" className="hover:text-[#4c82fb] transition-colors">Privacy Policy</a></li>
-                        <li><a href="#" className="hover:text-[#4c82fb] transition-colors flex items-center gap-2">Community <FiMessageCircle size={14} /></a></li>
+                    <h3 className="text-gray-900 dark:text-white font-semibold mb-6">Support</h3>
+                    <ul className="flex flex-col gap-4 text-gray-500 dark:text-[#98a1c0] text-sm">
+                        <li><a href="#" className="hover:text-blue-500 transition-colors">Help Center</a></li>
+                        <li><a href="#" className="hover:text-blue-500 transition-colors">Terms of Service</a></li>
+                        <li><a href="#" className="hover:text-blue-500 transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" className="hover:text-blue-500 transition-colors flex items-center gap-2">Community <FiMessageCircle size={14} /></a></li>
                     </ul>
                 </div>
             </div>
 
-            <div className="max-w-6xl mx-auto mt-16 pt-8 border-t border-gray-200 dark:border-[#293249] flex flex-col md:flex-row justify-between items-center gap-4">
-                <p className="text-gray-500 dark:text-[#5d6785] text-xs">© 2025 OrbIdSwap Protocol. All rights reserved.</p>
-                <div className="flex items-center gap-2 text-gray-500 dark:text-[#5d6785] text-xs">
-                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                    Operational on World Chain
+            <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-gray-200 dark:border-[#293249] flex flex-col md:flex-row justify-between items-center gap-4">
+                <p className="text-gray-400 dark:text-[#5d6785] text-xs">© 2025 OrbIdSwap Protocol. All rights reserved.</p>
+                <div className="flex items-center gap-2 text-gray-400 dark:text-[#5d6785] text-xs font-mono">
+                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                    Operational on World Chain Sepolia
                 </div>
             </div>
         </footer>

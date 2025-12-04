@@ -3,7 +3,7 @@
 import { Header } from '@/components/Header'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { FiArrowRight, FiZap, FiShield, FiTrendingUp } from 'react-icons/fi'
+import { FiArrowRight, FiZap, FiShield, FiTrendingUp, FiLayers, FiActivity } from 'react-icons/fi'
 import { useReadContract, useReadContracts, useGasPrice } from 'wagmi'
 import { FACTORY_ADDRESS, FACTORY_ABI, PAIR_ABI, WETH_ADDRESS } from '@/config/contracts'
 import { formatUnits } from 'viem'
@@ -76,86 +76,140 @@ export default function LandingPage() {
   }, [pairsData, pairAddresses])
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#0d111c] text-gray-900 dark:text-white font-sans selection:bg-black dark:selection:bg-[#4c82fb] selection:text-white overflow-hidden">
+    <div className="min-h-screen bg-white dark:bg-[#0d111c] text-gray-900 dark:text-white font-sans selection:bg-black dark:selection:bg-[#4c82fb] selection:text-white overflow-hidden bg-noise">
       <Header />
 
       {/* Hero Section */}
       <main className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
-        {/* Background Gradients */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-gray-100 dark:bg-blue-600/20 rounded-full blur-[120px] -z-10 pointer-events-none" />
-        <div className="absolute bottom-0 right-0 w-[800px] h-[600px] bg-gray-50 dark:bg-purple-600/10 rounded-full blur-[120px] -z-10 pointer-events-none" />
+        {/* Organic Background Gradients */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[800px] bg-gradient-to-b from-blue-50/50 to-transparent dark:from-blue-900/10 dark:to-transparent rounded-full blur-[120px] -z-10 pointer-events-none" />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="max-w-4xl mx-auto"
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="max-w-5xl mx-auto"
         >
-          <h1 className="text-5xl sm:text-7xl font-bold tracking-tight mb-6 text-gray-900 dark:text-transparent dark:bg-gradient-to-r dark:from-white dark:to-[#98a1c0] dark:bg-clip-text">
-            Swap with confidence on World Chain
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 dark:bg-[#131a2a] border border-gray-200 dark:border-[#293249] text-xs font-medium text-gray-600 dark:text-gray-400 mb-8">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            Live on World Chain Sepolia
+          </div>
+
+          <h1 className="text-6xl sm:text-8xl font-bold tracking-tighter mb-8 text-gray-900 dark:text-white leading-[0.9]">
+            Swap with <br className="hidden sm:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400">confidence.</span>
           </h1>
-          <p className="text-xl text-gray-500 dark:text-[#98a1c0] mb-10 max-w-2xl mx-auto leading-relaxed">
-            The most intuitive DEX for seamless token swaps and liquidity provision.
-            Experience low fees, fast transactions, and a premium interface.
+
+          <p className="text-xl sm:text-2xl text-gray-500 dark:text-[#98a1c0] mb-12 max-w-2xl mx-auto leading-relaxed font-light tracking-tight">
+            The native liquidity layer for World Chain. <br className="hidden sm:block" />
+            Instant swaps, deep liquidity, and zero compromise.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link href="/swap">
-              <button className="bg-black dark:bg-[#4c82fb] hover:bg-gray-800 dark:hover:bg-[#3b66c9] text-white font-semibold text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-2xl transition-all flex items-center gap-2 shadow-lg shadow-black/10 dark:shadow-blue-500/25 hover:scale-105 active:scale-95 w-full sm:w-auto justify-center">
-                Launch App <FiArrowRight />
+              <button className="group bg-black dark:bg-white text-white dark:text-black font-medium text-lg px-8 py-4 rounded-full transition-all flex items-center gap-2 hover:scale-105 active:scale-95 shadow-xl shadow-black/10 dark:shadow-white/10">
+                Launch App
+                <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
               </button>
             </Link>
             <Link href="/explore">
-              <button className="bg-white dark:bg-[#131a2a] border border-gray-200 dark:border-[#293249] hover:border-black dark:hover:border-[#4c82fb] text-gray-900 dark:text-white font-semibold text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-2xl transition-all hover:scale-105 active:scale-95 w-full sm:w-auto">
-                Explore Pools
+              <button className="px-8 py-4 rounded-full text-gray-600 dark:text-gray-300 font-medium hover:bg-gray-100 dark:hover:bg-[#131a2a] transition-colors">
+                View Analytics
               </button>
             </Link>
           </div>
         </motion.div>
 
-        {/* Stats Preview */}
+        {/* Glass Stats Strip */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-24 grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-4xl"
+          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          className="mt-24 w-full max-w-4xl"
         >
-          <div className="bg-white/50 dark:bg-[#131a2a]/50 backdrop-blur-md border border-gray-200 dark:border-[#293249] p-6 rounded-3xl shadow-sm dark:shadow-none">
-            <div className="text-gray-500 dark:text-[#98a1c0] text-sm font-medium mb-1">Total Pairs</div>
-            <div className="text-3xl font-bold text-gray-900 dark:text-white">{allPairsLength ? allPairsLength.toString() : '0'}</div>
-          </div>
-          <div className="bg-white/50 dark:bg-[#131a2a]/50 backdrop-blur-md border border-gray-200 dark:border-[#293249] p-6 rounded-3xl shadow-sm dark:shadow-none">
-            <div className="text-gray-500 dark:text-[#98a1c0] text-sm font-medium mb-1">Tracked Liquidity (WLD)</div>
-            <div className="text-3xl font-bold text-gray-900 dark:text-white">{tvlEth} WLD</div>
-          </div>
-          <div className="bg-white/50 dark:bg-[#131a2a]/50 backdrop-blur-md border border-gray-200 dark:border-[#293249] p-6 rounded-3xl shadow-sm dark:shadow-none">
-            <div className="text-gray-500 dark:text-[#98a1c0] text-sm font-medium mb-1">Current Gas</div>
-            <div className="text-3xl font-bold text-gray-900 dark:text-white">{gasPrice ? formatUnits(gasPrice, 9).slice(0, 4) : '0'} Gwei</div>
+          <div className="glass rounded-2xl p-2 flex flex-col sm:flex-row justify-between items-center divide-y sm:divide-y-0 sm:divide-x divide-gray-200/50 dark:divide-[#293249]/50">
+            <div className="flex-1 p-6 flex flex-col items-center">
+              <div className="text-gray-500 dark:text-[#98a1c0] text-xs uppercase tracking-widest font-semibold mb-2">Total Pairs</div>
+              <div className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">{allPairsLength ? allPairsLength.toString() : '0'}</div>
+            </div>
+            <div className="flex-1 p-6 flex flex-col items-center">
+              <div className="text-gray-500 dark:text-[#98a1c0] text-xs uppercase tracking-widest font-semibold mb-2">TVL (WLD)</div>
+              <div className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">{tvlEth}</div>
+            </div>
+            <div className="flex-1 p-6 flex flex-col items-center">
+              <div className="text-gray-500 dark:text-[#98a1c0] text-xs uppercase tracking-widest font-semibold mb-2">Gas (Gwei)</div>
+              <div className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">{gasPrice ? formatUnits(gasPrice, 9).slice(0, 4) : '0'}</div>
+            </div>
           </div>
         </motion.div>
 
-        {/* Features */}
-        <div className="mt-32 grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl text-left">
-          <div className="p-6 rounded-3xl hover:bg-gray-50 dark:hover:bg-[#131a2a] transition-colors group">
-            <div className="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center text-blue-500 mb-4 group-hover:scale-110 transition-transform">
-              <FiZap size={24} />
+        {/* Bento Grid Features */}
+        <div className="mt-32 w-full max-w-6xl">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
+            {/* Large Card */}
+            <div className="md:col-span-2 row-span-1 md:row-span-2 glass rounded-3xl p-10 flex flex-col justify-between relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full blur-3xl -mr-20 -mt-20 group-hover:scale-110 transition-transform duration-700" />
+              <div className="relative z-10">
+                <div className="w-14 h-14 bg-black dark:bg-white rounded-2xl flex items-center justify-center text-white dark:text-black mb-6">
+                  <FiZap size={28} />
+                </div>
+                <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">Lightning Fast Execution</h3>
+                <p className="text-lg text-gray-500 dark:text-[#98a1c0] max-w-md leading-relaxed">
+                  Built on World Chain&apos;s high-performance infrastructure. Experience sub-second finality and minimal slippage on every trade.
+                </p>
+              </div>
+              <div className="relative z-10 mt-8">
+                <div className="h-1 w-full bg-gray-100 dark:bg-[#293249] rounded-full overflow-hidden">
+                  <div className="h-full bg-blue-500 w-3/4 rounded-full" />
+                </div>
+                <div className="flex justify-between mt-2 text-sm font-medium text-gray-500 dark:text-[#98a1c0]">
+                  <span>Speed</span>
+                  <span>&lt; 1s</span>
+                </div>
+              </div>
             </div>
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Lightning Fast</h3>
-            <p className="text-gray-500 dark:text-[#98a1c0]">Optimized for World Chain&apos;s high-speed infrastructure, ensuring your trades execute in milliseconds.</p>
-          </div>
-          <div className="p-6 rounded-3xl hover:bg-gray-50 dark:hover:bg-[#131a2a] transition-colors group">
-            <div className="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center text-purple-500 mb-4 group-hover:scale-110 transition-transform">
-              <FiShield size={24} />
+
+            {/* Small Card 1 */}
+            <div className="glass rounded-3xl p-8 flex flex-col justify-between group hover:border-blue-500/30 transition-colors">
+              <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl flex items-center justify-center mb-4">
+                <FiShield size={24} />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Audited Security</h3>
+                <p className="text-gray-500 dark:text-[#98a1c0] text-sm">
+                  Forked from battle-tested Uniswap V2 contracts.
+                </p>
+              </div>
             </div>
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Secure & Audited</h3>
-            <p className="text-gray-500 dark:text-[#98a1c0]">Built on battle-tested Uniswap V2 contracts, providing a secure environment for your assets.</p>
-          </div>
-          <div className="p-6 rounded-3xl hover:bg-gray-50 dark:hover:bg-[#131a2a] transition-colors group">
-            <div className="w-12 h-12 bg-green-500/10 rounded-2xl flex items-center justify-center text-green-500 mb-4 group-hover:scale-110 transition-transform">
-              <FiTrendingUp size={24} />
+
+            {/* Small Card 2 */}
+            <div className="glass rounded-3xl p-8 flex flex-col justify-between group hover:border-purple-500/30 transition-colors">
+              <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-2xl flex items-center justify-center mb-4">
+                <FiTrendingUp size={24} />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Yield Farming</h3>
+                <p className="text-gray-500 dark:text-[#98a1c0] text-sm">
+                  Earn fees by providing liquidity to active pools.
+                </p>
+              </div>
             </div>
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Yield Farming</h3>
-            <p className="text-gray-500 dark:text-[#98a1c0]">Provide liquidity to your favorite pools and earn trading fees on every swap.</p>
+
+            {/* Medium Card */}
+            <div className="md:col-span-1 glass rounded-3xl p-8 flex flex-col justify-between group hover:border-green-500/30 transition-colors">
+              <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-2xl flex items-center justify-center mb-4">
+                <FiLayers size={24} />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Deep Liquidity</h3>
+                <p className="text-gray-500 dark:text-[#98a1c0] text-sm">
+                  Access the deepest liquidity pools on World Chain for minimal price impact.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </main>
