@@ -2,13 +2,17 @@
 
 import { useState } from 'react'
 import { FiSettings, FiArrowDown, FiInfo } from 'react-icons/fi'
-import { useAccount, useConnect } from 'wagmi'
+import { useAccount, useConnect, useBalance, useReadContract } from 'wagmi'
 import { injected } from 'wagmi/connectors'
+import { formatUnits, parseUnits } from 'viem'
+import { ERC20_ABI, ROUTER_ADDRESS, ROUTER_ABI, WETH_ADDRESS } from '../config/contracts'
 import { TokenSelectorModal } from './TokenSelectorModal'
 import { SettingsModal } from './SettingsModal'
+import { useDebounce } from '../hooks/useDebounce'
+import { useEffect } from 'react'
 
 export function SwapCard() {
-    const { isConnected } = useAccount()
+    const { address, isConnected } = useAccount()
     const { connect } = useConnect()
 
     const [sellAmount, setSellAmount] = useState('')
@@ -20,8 +24,86 @@ export function SwapCard() {
     const [selectorMode, setSelectorMode] = useState<'sell' | 'buy'>('sell')
 
     // Tokens State
-    const [sellToken, setSellToken] = useState({ symbol: 'ETH', name: 'Ether' })
-    const [buyToken, setBuyToken] = useState<null | { symbol: string, name: string }>(null)
+    const [sellToken, setSellToken] = useState({ symbol: 'ETH', name: 'Ether', address: '0x0000000000000000000000000000000000000000' })
+    const [buyToken, setBuyToken] = useState<null | { symbol: string, name: string, address: string }>(null)
+
+    // ETH Balance
+    const { data: ethBalance } = useBalance({ address })
+
+    // Sell Token Balance (ERC20)
+    const { data: sellTokenBalance } = useReadContract({
+        address: sellToken.address as `0x${string}`,
+        abi: ERC20_ABI,
+        functionName: 'balanceOf',
+        args: address ? [address] : undefined,
+        query: {
+            enabled: !!address && sellToken.symbol !== 'ETH',
+        }
+    })
+
+    // Buy Token Balance (ERC20)
+    const { data: buyTokenBalance } = useReadContract({
+        address: buyToken?.address as `0x${string}`,
+        abi: ERC20_ABI,
+        functionName: 'balanceOf',
+        args: address ? [address] : undefined,
+        query: {
+            enabled: !!address && !!buyToken && buyToken.symbol !== 'ETH',
+        }
+    })
+
+    // Helper to get formatted balance
+    const getBalance = (token: { symbol: string } | null, isEthBalance: any, tokenBalance: any) => {
+        if (!token) return '0.00'
+        if (token.symbol === 'ETH') {
+            return isEthBalance ? formatUnits(isEthBalance.value, isEthBalance.decimals) : '0.00'
+        }
+        return tokenBalance ? formatUnits(tokenBalance, 18) : '0.00' // Assuming 18 decimals for now
+    }
+
+    // Quote Fetching
+    const debouncedSellAmount = useDebounce(sellAmount, 500)
+
+    const getPath = () => {
+        if (!sellToken || !buyToken) return undefined
+
+        const sellAddress = sellToken.symbol === 'ETH' ? WETH_ADDRESS : sellToken.address
+        const buyAddress = buyToken.symbol === 'ETH' ? WETH_ADDRESS : buyToken.address
+
+        if (sellAddress === buyAddress) return undefined
+
+        // Simple routing: Direct or via WETH
+        // If one is WETH, direct path.
+        if (sellAddress === WETH_ADDRESS || buyAddress === WETH_ADDRESS) {
+            return [sellAddress, buyAddress] as `0x${string}`[]
+        }
+
+        // Otherwise, route through WETH
+        return [sellAddress, WETH_ADDRESS, buyAddress] as `0x${string}`[]
+    }
+
+    const path = getPath()
+    const amountIn = debouncedSellAmount ? parseUnits(debouncedSellAmount, 18) : 0n // Assuming 18 decimals
+
+    const { data: amountsOut } = useReadContract({
+        address: ROUTER_ADDRESS as `0x${string}`,
+        abi: ROUTER_ABI,
+        functionName: 'getAmountsOut',
+        args: path && amountIn > 0n ? [amountIn, path] : undefined,
+        query: {
+            enabled: !!path && amountIn > 0n,
+        }
+    })
+
+    // Update Buy Amount when quote changes
+    useEffect(() => {
+        if (amountsOut && amountsOut.length > 0) {
+            const amount = amountsOut[amountsOut.length - 1]
+            setBuyAmount(formatUnits(amount, 18)) // Assuming 18 decimals
+        } else if (!debouncedSellAmount) {
+            setBuyAmount('')
+        }
+    }, [amountsOut, debouncedSellAmount])
 
     const openTokenSelector = (mode: 'sell' | 'buy') => {
         setSelectorMode(mode)
@@ -81,7 +163,7 @@ export function SwapCard() {
                         </div>
                         <div className="flex justify-between mt-2">
                             <span className="text-[#5d6785] text-sm">$0.00</span>
-                            <span className="text-[#5d6785] text-sm">Balance: 0.00</span>
+                            <span className="text-[#5d6785] text-sm">Balance: {parseFloat(getBalance(sellToken, ethBalance, sellTokenBalance)).toFixed(4)}</span>
                         </div>
                     </div>
 
@@ -128,7 +210,7 @@ export function SwapCard() {
                         </div>
                         <div className="flex justify-between mt-2">
                             <span className="text-[#5d6785] text-sm">$0.00</span>
-                            <span className="text-[#5d6785] text-sm">Balance: 0.00</span>
+                            <span className="text-[#5d6785] text-sm">Balance: {parseFloat(getBalance(buyToken, ethBalance, buyTokenBalance)).toFixed(4)}</span>
                         </div>
                     </div>
                 </div>
