@@ -3,26 +3,106 @@
 import { Header } from '../../components/Header'
 import { AddLiquidityModal } from '../../components/AddLiquidityModal'
 import { RemoveLiquidityModal } from '../../components/RemoveLiquidityModal'
-import { useState } from 'react'
-import { useAccount } from 'wagmi'
+import { useState, useEffect } from 'react'
+import { useAccount, useReadContract, useReadContracts } from 'wagmi'
+import { formatUnits } from 'viem'
+import { FACTORY_ADDRESS, FACTORY_ABI, PAIR_ABI, ERC20_ABI } from '../../config/contracts'
 
 export default function Pool() {
-    const { isConnected } = useAccount()
+    const { address, isConnected } = useAccount()
     const [isAddLiquidityOpen, setIsAddLiquidityOpen] = useState(false)
     const [isRemoveLiquidityOpen, setIsRemoveLiquidityOpen] = useState(false)
     const [selectedPair, setSelectedPair] = useState<any>(null)
+    const [userPositions, setUserPositions] = useState<any[]>([])
 
-    // Mock positions for demonstration
-    // In a real app, we would fetch these from the subgraph or by checking common pairs
-    const positions = [
-        {
-            pairAddress: '0x...',
-            tokenA: { symbol: 'ETH', address: '0x...' },
-            tokenB: { symbol: 'USDC', address: '0x...' },
-            liquidity: '1.234',
-            share: '0.01%'
+    // 1. Get total pairs length
+    const { data: allPairsLength } = useReadContract({
+        address: FACTORY_ADDRESS as `0x${string}`,
+        abi: FACTORY_ABI,
+        functionName: 'allPairsLength',
+    })
+
+    // 2. Prepare hooks to fetch first 10 pairs (for demo purposes)
+    // In production, this should be indexed or paginated properly
+    const pairsCount = allPairsLength ? Number(allPairsLength) : 0
+    const pairsToFetch = Math.min(pairsCount, 10)
+    const pairIndexes = Array.from({ length: pairsToFetch }, (_, i) => BigInt(i))
+
+    const { data: pairAddresses } = useReadContracts({
+        contracts: pairIndexes.map(index => ({
+            address: FACTORY_ADDRESS as `0x${string}`,
+            abi: FACTORY_ABI,
+            functionName: 'allPairs',
+            args: [index],
+        }))
+    })
+
+    // 3. Fetch data for these pairs
+    const { data: pairsData } = useReadContracts({
+        contracts: pairAddresses?.flatMap(result => {
+            const pairAddress = result.result as unknown as `0x${string}`
+            if (!pairAddress) return []
+            return [
+                { address: pairAddress, abi: PAIR_ABI, functionName: 'token0' },
+                { address: pairAddress, abi: PAIR_ABI, functionName: 'token1' },
+                { address: pairAddress, abi: PAIR_ABI, functionName: 'balanceOf', args: [address] },
+                { address: pairAddress, abi: PAIR_ABI, functionName: 'totalSupply' },
+                { address: pairAddress, abi: PAIR_ABI, functionName: 'getReserves' },
+            ]
+        }) || [],
+        query: {
+            enabled: !!pairAddresses && !!address
         }
-    ]
+    })
+
+    // 4. Fetch Token Symbols (Separate effect to avoid complex nesting in one hook)
+    // We'll do this processing in a useEffect once pairsData is available
+
+    // Helper to fetch token symbol
+    // Note: This is a bit hacky for a pure frontend without indexer. 
+    // Ideally we'd use a multicall for symbols too, but let's process what we have first.
+
+    useEffect(() => {
+        if (!pairsData || !pairAddresses || !address) return
+
+        const processPositions = async () => {
+            const positions: any[] = []
+
+            // Each pair has 5 calls
+            for (let i = 0; i < pairAddresses.length; i++) {
+                const baseIndex = i * 5
+                const pairAddress = pairAddresses[i].result as unknown as string
+                const token0Address = pairsData[baseIndex]?.result as unknown as string
+                const token1Address = pairsData[baseIndex + 1]?.result as unknown as string
+                const userBalance = pairsData[baseIndex + 2]?.result as bigint
+                const totalSupply = pairsData[baseIndex + 3]?.result as bigint
+                // const reserves = pairsData[baseIndex + 4]?.result
+
+                if (userBalance && userBalance > 0n) {
+                    // We found a position! Now we need symbols.
+                    // For now, we'll just use truncated addresses or hardcoded known ones if possible
+                    // In a real app, we'd fetch symbols here or have a token list
+
+                    // Simple mock for symbols to avoid N+1 requests for now, 
+                    // or we could assume WETH/USDC for demo if addresses match
+
+                    const share = (Number(userBalance) / Number(totalSupply)) * 100
+
+                    positions.push({
+                        pairAddress,
+                        tokenA: { symbol: 'TKN1', address: token0Address }, // Placeholder symbols
+                        tokenB: { symbol: 'TKN2', address: token1Address },
+                        liquidity: formatUnits(userBalance, 18),
+                        share: share.toFixed(2) + '%'
+                    })
+                }
+            }
+            setUserPositions(positions)
+        }
+
+        processPositions()
+    }, [pairsData, pairAddresses, address])
+
 
     const handleRemoveClick = (position: any) => {
         setSelectedPair(position)
@@ -48,13 +128,14 @@ export default function Pool() {
                         <div className="bg-[#131a2a] rounded-3xl p-8 border border-[#293249] text-center">
                             <p className="text-[#98a1c0] text-lg">Connect your wallet to view your liquidity positions.</p>
                         </div>
-                    ) : positions.length === 0 ? (
+                    ) : userPositions.length === 0 ? (
                         <div className="bg-[#131a2a] rounded-3xl p-8 border border-[#293249] text-center">
                             <p className="text-[#98a1c0] text-lg">No active liquidity positions found.</p>
+                            <p className="text-[#5d6785] text-sm mt-2">Scanning first {pairsToFetch} pairs...</p>
                         </div>
                     ) : (
                         <div className="grid gap-4">
-                            {positions.map((pos, i) => (
+                            {userPositions.map((pos, i) => (
                                 <div key={i} className="bg-[#131a2a] rounded-3xl p-6 border border-[#293249] hover:border-[#4c82fb] transition-colors">
                                     <div className="flex justify-between items-center mb-4">
                                         <div className="flex items-center gap-2">
@@ -62,7 +143,8 @@ export default function Pool() {
                                                 <div className="w-8 h-8 rounded-full bg-blue-500 border-2 border-[#131a2a]"></div>
                                                 <div className="w-8 h-8 rounded-full bg-purple-500 border-2 border-[#131a2a]"></div>
                                             </div>
-                                            <span className="font-bold text-lg">{pos.tokenA.symbol}/{pos.tokenB.symbol}</span>
+                                            <span className="font-bold text-lg">LP Token</span>
+                                            <span className="text-sm text-[#98a1c0] bg-[#0d111c] px-2 py-1 rounded-lg">{pos.pairAddress.slice(0, 6)}...{pos.pairAddress.slice(-4)}</span>
                                         </div>
                                         <button
                                             onClick={() => handleRemoveClick(pos)}
@@ -73,7 +155,7 @@ export default function Pool() {
                                     </div>
                                     <div className="flex justify-between text-sm">
                                         <span className="text-[#98a1c0]">Your Liquidity</span>
-                                        <span className="text-white font-medium">{pos.liquidity} LP</span>
+                                        <span className="text-white font-medium">{parseFloat(pos.liquidity).toFixed(4)} LP</span>
                                     </div>
                                     <div className="flex justify-between text-sm mt-1">
                                         <span className="text-[#98a1c0]">Share of Pool</span>

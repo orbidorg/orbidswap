@@ -4,9 +4,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 interface SettingsModalProps {
     isOpen: boolean
     onClose: () => void
+    slippage: string
+    setSlippage: (value: string) => void
+    deadline: string
+    setDeadline: (value: string) => void
 }
 
-export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
+export function SettingsModal({ isOpen, onClose, slippage, setSlippage, deadline, setDeadline }: SettingsModalProps) {
     return (
         <AnimatePresence>
             {isOpen && (
@@ -33,13 +37,25 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                                     <FiInfo size={14} className="text-[#5d6785]" />
                                 </div>
                                 <div className="flex gap-2">
-                                    <button className="flex-1 bg-[#4c82fb] text-white font-medium py-2 rounded-xl text-sm">Auto</button>
-                                    <button className="flex-1 bg-[#0d111c] border border-[#293249] text-[#98a1c0] hover:text-white font-medium py-2 rounded-xl text-sm transition-colors">0.5%</button>
+                                    <button
+                                        onClick={() => setSlippage('auto')}
+                                        className={`flex-1 font-medium py-2 rounded-xl text-sm transition-colors ${slippage === 'auto' ? 'bg-[#4c82fb] text-white' : 'bg-[#0d111c] border border-[#293249] text-[#98a1c0] hover:text-white'}`}
+                                    >
+                                        Auto
+                                    </button>
+                                    <button
+                                        onClick={() => setSlippage('0.5')}
+                                        className={`flex-1 font-medium py-2 rounded-xl text-sm transition-colors ${slippage === '0.5' ? 'bg-[#4c82fb] text-white' : 'bg-[#0d111c] border border-[#293249] text-[#98a1c0] hover:text-white'}`}
+                                    >
+                                        0.5%
+                                    </button>
                                     <div className="flex-[1.5] relative">
                                         <input
                                             type="text"
-                                            placeholder="0.5"
-                                            className="w-full h-full bg-[#0d111c] border border-[#293249] rounded-xl px-3 text-right text-white outline-none focus:border-[#4c82fb] transition-colors"
+                                            placeholder="Custom"
+                                            value={slippage === 'auto' ? '' : slippage}
+                                            onChange={(e) => setSlippage(e.target.value)}
+                                            className={`w-full h-full bg-[#0d111c] border rounded-xl px-3 text-right text-white outline-none focus:border-[#4c82fb] transition-colors ${slippage !== 'auto' && slippage !== '0.5' ? 'border-[#4c82fb]' : 'border-[#293249]'}`}
                                         />
                                         <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#98a1c0] text-sm">%</span>
                                     </div>
@@ -56,7 +72,8 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                                     <div className="w-24 relative">
                                         <input
                                             type="text"
-                                            placeholder="20"
+                                            value={deadline}
+                                            onChange={(e) => setDeadline(e.target.value)}
                                             className="w-full bg-[#0d111c] border border-[#293249] rounded-xl py-2 px-3 text-right text-white outline-none focus:border-[#4c82fb] transition-colors"
                                         />
                                     </div>

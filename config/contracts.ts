@@ -246,6 +246,24 @@ export const FACTORY_ABI = [
         stateMutability: 'view',
         type: 'function',
     },
+    {
+        constant: true,
+        inputs: [],
+        name: 'allPairsLength',
+        outputs: [{ name: '', type: 'uint256' }],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
+    {
+        constant: true,
+        inputs: [{ name: '', type: 'uint256' }],
+        name: 'allPairs',
+        outputs: [{ name: '', type: 'address' }],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function',
+    },
 ] as const
 
 export const PAIR_ABI = [

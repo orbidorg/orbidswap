@@ -18,6 +18,8 @@ export function SwapCard() {
 
     const [sellAmount, setSellAmount] = useState('')
     const [buyAmount, setBuyAmount] = useState('')
+    const [slippage, setSlippage] = useState('auto')
+    const [deadline, setDeadline] = useState('20')
 
     // Modals State
     const [isTokenSelectorOpen, setIsTokenSelectorOpen] = useState(false)
@@ -160,15 +162,24 @@ export function SwapCard() {
         if (!path || !address) return
 
         const amountIn = parseUnits(sellAmount, 18)
-        const amountOutMin = 0n // Slippage not implemented yet
-        const deadline = BigInt(Math.floor(Date.now() / 1000) + 60 * 20) // 20 minutes
+
+        // Calculate AmountOutMin based on Slippage
+        let amountOutMin = 0n
+        if (amountsOut && amountsOut.length > 0) {
+            const estimatedOut = amountsOut[amountsOut.length - 1]
+            const slippagePercent = slippage === 'auto' ? 0.5 : parseFloat(slippage)
+            const minOut = Number(formatUnits(estimatedOut, 18)) * (1 - slippagePercent / 100)
+            amountOutMin = parseUnits(minOut.toFixed(18), 18)
+        }
+
+        const deadlineTimestamp = BigInt(Math.floor(Date.now() / 1000) + 60 * parseInt(deadline))
 
         if (sellToken.symbol === 'ETH') {
             writeContract({
                 address: ROUTER_ADDRESS as `0x${string}`,
                 abi: ROUTER_ABI,
                 functionName: 'swapExactETHForTokens',
-                args: [amountOutMin, path, address, deadline],
+                args: [amountOutMin, path, address, deadlineTimestamp],
                 value: amountIn,
             })
         } else if (buyToken?.symbol === 'ETH') {
@@ -176,14 +187,14 @@ export function SwapCard() {
                 address: ROUTER_ADDRESS as `0x${string}`,
                 abi: ROUTER_ABI,
                 functionName: 'swapExactTokensForETH',
-                args: [amountIn, amountOutMin, path, address, deadline],
+                args: [amountIn, amountOutMin, path, address, deadlineTimestamp],
             })
         } else {
             writeContract({
                 address: ROUTER_ADDRESS as `0x${string}`,
                 abi: ROUTER_ABI,
                 functionName: 'swapExactTokensForTokens',
-                args: [amountIn, amountOutMin, path, address, deadline],
+                args: [amountIn, amountOutMin, path, address, deadlineTimestamp],
             })
         }
     }
@@ -376,6 +387,10 @@ export function SwapCard() {
             <SettingsModal
                 isOpen={isSettingsOpen}
                 onClose={() => setIsSettingsOpen(false)}
+                slippage={slippage}
+                setSlippage={setSlippage}
+                deadline={deadline}
+                setDeadline={setDeadline}
             />
         </>
     )
