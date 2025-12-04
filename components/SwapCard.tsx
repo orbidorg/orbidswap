@@ -1,15 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { FiSettings, FiArrowDown, FiInfo } from 'react-icons/fi'
-import { useAccount, useConnect, useBalance, useReadContract } from 'wagmi'
+import { useAccount, useConnect, useBalance, useReadContract, useWriteContract } from 'wagmi'
 import { injected } from 'wagmi/connectors'
 import { formatUnits, parseUnits } from 'viem'
 import { ERC20_ABI, ROUTER_ADDRESS, ROUTER_ABI, WETH_ADDRESS } from '../config/contracts'
 import { TokenSelectorModal } from './TokenSelectorModal'
 import { SettingsModal } from './SettingsModal'
 import { useDebounce } from '../hooks/useDebounce'
-import { useEffect } from 'react'
 
 export function SwapCard() {
     const { address, isConnected } = useAccount()
@@ -83,7 +82,7 @@ export function SwapCard() {
     }
 
     const path = getPath()
-    const amountIn = debouncedSellAmount ? parseUnits(debouncedSellAmount, 18) : 0n // Assuming 18 decimals
+    const amountIn = debouncedSellAmount ? parseUnits(debouncedSellAmount, 18) : 0n
 
     const { data: amountsOut } = useReadContract({
         address: ROUTER_ADDRESS as `0x${string}`,
@@ -105,6 +104,66 @@ export function SwapCard() {
         }
     }, [amountsOut, debouncedSellAmount])
 
+    // Allowance (only for ERC20)
+    const { data: allowance, refetch: refetchAllowance } = useReadContract({
+        address: sellToken.address as `0x${string}`,
+        abi: ERC20_ABI,
+        functionName: 'allowance',
+        args: address ? [address, ROUTER_ADDRESS as `0x${string}`] : undefined,
+        query: {
+            enabled: !!address && sellToken.symbol !== 'ETH',
+        }
+    })
+
+    // Write Contract Hook
+    const { writeContract, isPending: isWritePending } = useWriteContract()
+
+    const handleApprove = () => {
+        if (!sellToken.address) return
+        writeContract({
+            address: sellToken.address as `0x${string}`,
+            abi: ERC20_ABI,
+            functionName: 'approve',
+            args: [ROUTER_ADDRESS as `0x${string}`, parseUnits(sellAmount, 18)],
+        }, {
+            onSuccess: () => {
+                setTimeout(refetchAllowance, 5000)
+            }
+        })
+    }
+
+    const handleSwap = () => {
+        if (!path || !address) return
+
+        const amountIn = parseUnits(sellAmount, 18)
+        const amountOutMin = 0n // Slippage not implemented yet
+        const deadline = BigInt(Math.floor(Date.now() / 1000) + 60 * 20) // 20 minutes
+
+        if (sellToken.symbol === 'ETH') {
+            writeContract({
+                address: ROUTER_ADDRESS as `0x${string}`,
+                abi: ROUTER_ABI,
+                functionName: 'swapExactETHForTokens',
+                args: [amountOutMin, path, address, deadline],
+                value: amountIn,
+            })
+        } else if (buyToken?.symbol === 'ETH') {
+            writeContract({
+                address: ROUTER_ADDRESS as `0x${string}`,
+                abi: ROUTER_ABI,
+                functionName: 'swapExactTokensForETH',
+                args: [amountIn, amountOutMin, path, address, deadline],
+            })
+        } else {
+            writeContract({
+                address: ROUTER_ADDRESS as `0x${string}`,
+                abi: ROUTER_ABI,
+                functionName: 'swapExactTokensForTokens',
+                args: [amountIn, amountOutMin, path, address, deadline],
+            })
+        }
+    }
+
     const openTokenSelector = (mode: 'sell' | 'buy') => {
         setSelectorMode(mode)
         setIsTokenSelectorOpen(true)
@@ -116,6 +175,64 @@ export function SwapCard() {
         } else {
             setBuyToken(token)
         }
+    }
+
+    // Button Logic
+    const renderActionButton = () => {
+        if (!isConnected) {
+            return (
+                <button
+                    onClick={() => connect({ connector: injected() })}
+                    className="w-full bg-[#4c82fb]/10 hover:bg-[#4c82fb]/20 text-[#4c82fb] font-semibold text-xl py-4 rounded-2xl transition-all"
+                >
+                    Connect Wallet
+                </button>
+            )
+        }
+
+        if (!sellAmount) {
+            return (
+                <button className="w-full bg-[#293249] text-[#5d6785] font-semibold text-xl py-4 rounded-2xl cursor-not-allowed">
+                    Enter an amount
+                </button>
+            )
+        }
+
+        if (!buyToken) {
+            return (
+                <button className="w-full bg-[#293249] text-[#5d6785] font-semibold text-xl py-4 rounded-2xl cursor-not-allowed">
+                    Select a token
+                </button>
+            )
+        }
+
+        // Check Allowance for ERC20
+        if (sellToken.symbol !== 'ETH') {
+            const currentAllowance = allowance ? allowance as bigint : 0n
+            const amountToSell = parseUnits(sellAmount, 18)
+
+            if (currentAllowance < amountToSell) {
+                return (
+                    <button
+                        onClick={handleApprove}
+                        disabled={isWritePending}
+                        className="w-full bg-[#4c82fb] hover:bg-[#3b66c9] text-white font-semibold text-xl py-4 rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {isWritePending ? 'Approving...' : `Approve ${sellToken.symbol}`}
+                    </button>
+                )
+            }
+        }
+
+        return (
+            <button
+                onClick={handleSwap}
+                disabled={isWritePending}
+                className="w-full bg-[#4c82fb] hover:bg-[#3b66c9] text-white font-semibold text-xl py-4 rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+                {isWritePending ? 'Swapping...' : 'Swap'}
+            </button>
+        )
     }
 
     return (
@@ -217,18 +334,7 @@ export function SwapCard() {
 
                 {/* Action Button */}
                 <div className="mt-2">
-                    {!isConnected ? (
-                        <button
-                            onClick={() => connect({ connector: injected() })}
-                            className="w-full bg-[#4c82fb]/10 hover:bg-[#4c82fb]/20 text-[#4c82fb] font-semibold text-xl py-4 rounded-2xl transition-all"
-                        >
-                            Connect Wallet
-                        </button>
-                    ) : (
-                        <button className="w-full bg-[#293249] text-[#5d6785] font-semibold text-xl py-4 rounded-2xl cursor-not-allowed">
-                            {!buyToken ? 'Select a token' : 'Enter an amount'}
-                        </button>
-                    )}
+                    {renderActionButton()}
                 </div>
             </div>
 
