@@ -11,7 +11,7 @@ contracts/artifacts
 contracts/cache
 
 # Next.js
-frontend/.next
-frontend/out
-frontend/build
-frontend/dist
+.next
+out
+build
+dist
