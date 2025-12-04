@@ -9,6 +9,7 @@ import { ERC20_ABI, ROUTER_ADDRESS, ROUTER_ABI, WETH_ADDRESS } from '../config/c
 import { TokenSelectorModal } from './TokenSelectorModal'
 import { SettingsModal } from './SettingsModal'
 import { useDebounce } from '../hooks/useDebounce'
+import { motion } from 'framer-motion'
 
 export function SwapCard() {
     const { address, isConnected } = useAccount()
@@ -237,7 +238,12 @@ export function SwapCard() {
 
     return (
         <>
-            <div className="w-full max-w-[480px] bg-[#0d111c] rounded-3xl p-2 border border-[#131a2a] shadow-xl">
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="w-full max-w-[480px] bg-[#0d111c] rounded-3xl p-2 border border-[#131a2a] shadow-xl"
+            >
                 {/* Header */}
                 <div className="flex items-center justify-between px-4 py-3 mb-2">
                     <div className="flex gap-4">
@@ -336,7 +342,7 @@ export function SwapCard() {
                 <div className="mt-2">
                     {renderActionButton()}
                 </div>
-            </div>
+            </motion.div>
 
             <TokenSelectorModal
                 isOpen={isTokenSelectorOpen}

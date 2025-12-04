@@ -5,11 +5,11 @@ import { injected } from 'wagmi/connectors'
 import { FiSearch, FiMenu, FiX, FiChevronDown } from 'react-icons/fi'
 import Link from 'next/link'
 import { useState } from 'react'
+import { UserWalletPanel } from './UserWalletPanel'
 
 export function Header() {
-    const { address, isConnected } = useAccount()
+    const { isConnected } = useAccount()
     const { connect } = useConnect()
-    const { disconnect } = useDisconnect()
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
     const navLinks = [
@@ -69,17 +69,7 @@ export function Header() {
                 </div>
 
                 {isConnected ? (
-                    <div className="flex items-center gap-2 bg-[#131a2a] rounded-xl p-1 pr-3 border border-[#293249]">
-                        <div className="px-2 py-1 bg-[#293249] rounded-lg text-sm font-medium">
-                            0.00 ETH
-                        </div>
-                        <div className="flex items-center gap-2 cursor-pointer hover:opacity-80" onClick={() => disconnect()}>
-                            <span className="text-sm font-medium">
-                                {address?.slice(0, 6)}...{address?.slice(-4)}
-                            </span>
-                            <div className="w-4 h-4 rounded-full bg-gradient-to-r from-pink-500 to-violet-500"></div>
-                        </div>
-                    </div>
+                    <UserWalletPanel />
                 ) : (
                     <button
                         onClick={() => connect({ connector: injected() })}

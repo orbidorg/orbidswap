@@ -1,7 +1,5 @@
-'use client'
-
 import { FiX, FiInfo } from 'react-icons/fi'
-import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface SettingsModalProps {
     isOpen: boolean
@@ -9,69 +7,66 @@ interface SettingsModalProps {
 }
 
 export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
-    const [slippage, setSlippage] = useState('auto')
-    const [deadline, setDeadline] = useState('30')
-
-    if (!isOpen) return null
-
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <div className="w-full max-w-sm bg-[#0d111c] rounded-3xl border border-[#293249] shadow-2xl p-5">
-                <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-white font-medium text-lg">Settings</h3>
-                    <button onClick={onClose} className="text-[#98a1c0] hover:text-white transition-colors">
-                        <FiX size={24} />
-                    </button>
-                </div>
-
-                {/* Slippage */}
-                <div className="mb-6">
-                    <div className="flex items-center gap-2 mb-3">
-                        <span className="text-[#98a1c0] font-medium">Max. slippage</span>
-                        <FiInfo size={14} className="text-[#5d6785]" />
-                    </div>
-                    <div className="flex gap-2">
-                        <button
-                            onClick={() => setSlippage('auto')}
-                            className={`px-4 py-2 rounded-xl font-medium transition-colors ${slippage === 'auto'
-                                ? 'bg-[#4c82fb] text-white'
-                                : 'bg-[#131a2a] text-[#98a1c0] hover:bg-[#293249]'
-                                }`}
-                        >
-                            Auto
-                        </button>
-                        <div className={`flex-1 flex items-center bg-[#131a2a] border ${slippage !== 'auto' ? 'border-[#4c82fb]' : 'border-[#293249]'} rounded-xl px-3`}>
-                            <input
-                                type="text"
-                                placeholder="0.50"
-                                value={slippage === 'auto' ? '' : slippage}
-                                onChange={(e) => setSlippage(e.target.value)}
-                                className="w-full bg-transparent text-white text-right outline-none font-medium"
-                            />
-                            <span className="text-[#98a1c0] ml-1">%</span>
+        <AnimatePresence>
+            {isOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                        className="w-full max-w-sm bg-[#131a2a] rounded-3xl border border-[#293249] overflow-hidden shadow-2xl"
+                    >
+                        <div className="p-5 border-b border-[#293249] flex justify-between items-center">
+                            <h3 className="text-white font-medium text-lg">Settings</h3>
+                            <button onClick={onClose} className="text-[#98a1c0] hover:text-white transition-colors">
+                                <FiX size={24} />
+                            </button>
                         </div>
-                    </div>
-                </div>
 
-                {/* Deadline */}
-                <div>
-                    <div className="flex items-center gap-2 mb-3">
-                        <span className="text-[#98a1c0] font-medium">Transaction deadline</span>
-                        <FiInfo size={14} className="text-[#5d6785]" />
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <div className="w-24 flex items-center bg-[#131a2a] border border-[#293249] rounded-xl px-3 py-2 focus-within:border-[#4c82fb] transition-colors">
-                            <input
-                                type="text"
-                                value={deadline}
-                                onChange={(e) => setDeadline(e.target.value)}
-                                className="w-full bg-transparent text-white text-right outline-none font-medium"
-                            />
+                        <div className="p-5 flex flex-col gap-6">
+                            {/* Slippage */}
+                            <div>
+                                <div className="flex items-center gap-2 mb-3">
+                                    <span className="text-[#98a1c0] font-medium text-sm">Max. slippage</span>
+                                    <FiInfo size={14} className="text-[#5d6785]" />
+                                </div>
+                                <div className="flex gap-2">
+                                    <button className="flex-1 bg-[#4c82fb] text-white font-medium py-2 rounded-xl text-sm">Auto</button>
+                                    <button className="flex-1 bg-[#0d111c] border border-[#293249] text-[#98a1c0] hover:text-white font-medium py-2 rounded-xl text-sm transition-colors">0.5%</button>
+                                    <div className="flex-[1.5] relative">
+                                        <input
+                                            type="text"
+                                            placeholder="0.5"
+                                            className="w-full h-full bg-[#0d111c] border border-[#293249] rounded-xl px-3 text-right text-white outline-none focus:border-[#4c82fb] transition-colors"
+                                        />
+                                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#98a1c0] text-sm">%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Transaction Deadline */}
+                            <div>
+                                <div className="flex items-center gap-2 mb-3">
+                                    <span className="text-[#98a1c0] font-medium text-sm">Transaction deadline</span>
+                                    <FiInfo size={14} className="text-[#5d6785]" />
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <div className="w-24 relative">
+                                        <input
+                                            type="text"
+                                            placeholder="20"
+                                            className="w-full bg-[#0d111c] border border-[#293249] rounded-xl py-2 px-3 text-right text-white outline-none focus:border-[#4c82fb] transition-colors"
+                                        />
+                                    </div>
+                                    <span className="text-[#98a1c0] text-sm">minutes</span>
+                                </div>
+                            </div>
                         </div>
-                        <span className="text-[#98a1c0] font-medium">minutes</span>
-                    </div>
+                    </motion.div>
                 </div>
-            </div>
-        </div>
+            )}
+        </AnimatePresence>
     )
 }

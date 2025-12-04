@@ -1,22 +1,14 @@
-'use client'
-
-import { FiSearch, FiX } from 'react-icons/fi'
 import { useState } from 'react'
-
-interface Token {
-    symbol: string
-    name: string
-    address: string
-    logo?: string
-}
+import { FiSearch, FiX } from 'react-icons/fi'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface TokenSelectorModalProps {
     isOpen: boolean
     onClose: () => void
-    onSelect: (token: Token) => void
+    onSelect: (token: any) => void
 }
 
-const COMMON_TOKENS: Token[] = [
+const COMMON_TOKENS = [
     { symbol: 'ETH', name: 'Ether', address: '0x0000000000000000000000000000000000000000' },
     { symbol: 'WETH', name: 'Wrapped Ether', address: '0xdBd74deF5339C659719Afd3f533412b5de4D3736' },
     { symbol: 'USDC', name: 'USD Coin', address: '0x...' }, // Placeholder
@@ -26,88 +18,85 @@ const COMMON_TOKENS: Token[] = [
 export function TokenSelectorModal({ isOpen, onClose, onSelect }: TokenSelectorModalProps) {
     const [searchQuery, setSearchQuery] = useState('')
 
-    if (!isOpen) return null
-
-    const filteredTokens = COMMON_TOKENS.filter(token =>
-        token.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        token.name.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <div className="w-full max-w-md bg-[#0d111c] rounded-3xl border border-[#293249] shadow-2xl overflow-hidden flex flex-col max-h-[80vh]">
-                {/* Header */}
-                <div className="p-5 pb-0">
-                    <div className="flex justify-between items-center mb-4">
-                        <h3 className="text-white font-medium text-lg">Select a token</h3>
-                        <button onClick={onClose} className="text-[#98a1c0] hover:text-white transition-colors">
-                            <FiX size={24} />
-                        </button>
-                    </div>
-
-                    {/* Search */}
-                    <div className="relative mb-4">
-                        <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-[#98a1c0]">
-                            <FiSearch size={20} />
-                        </div>
-                        <input
-                            type="text"
-                            placeholder="Search name or paste address"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-[#131a2a] border border-[#293249] rounded-2xl py-3 pl-12 pr-4 text-white placeholder-[#98a1c0] focus:outline-none focus:border-[#4c82fb] focus:ring-1 focus:ring-[#4c82fb] transition-all text-lg"
-                            autoFocus
-                        />
-                    </div>
-
-                    {/* Common Tokens */}
-                    <div className="flex gap-2 flex-wrap mb-4">
-                        {COMMON_TOKENS.slice(0, 4).map((token) => (
-                            <button
-                                key={token.symbol}
-                                onClick={() => { onSelect(token); onClose(); }}
-                                className="flex items-center gap-2 bg-[#131a2a] hover:bg-[#293249] border border-[#293249] rounded-full px-3 py-1.5 transition-colors"
-                            >
-                                {/* Placeholder Logo */}
-                                <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-[10px] font-bold text-white">
-                                    {token.symbol[0]}
-                                </div>
-                                <span className="text-white font-medium">{token.symbol}</span>
+        <AnimatePresence>
+            {isOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                        className="w-full max-w-md bg-[#131a2a] rounded-3xl border border-[#293249] overflow-hidden shadow-2xl"
+                    >
+                        <div className="p-5 border-b border-[#293249] flex justify-between items-center">
+                            <h3 className="text-white font-medium text-lg">Select a token</h3>
+                            <button onClick={onClose} className="text-[#98a1c0] hover:text-white transition-colors">
+                                <FiX size={24} />
                             </button>
-                        ))}
-                    </div>
+                        </div>
 
-                    <div className="h-px bg-[#293249] w-full" />
-                </div>
+                        <div className="p-5">
+                            <div className="relative mb-4">
+                                <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-[#98a1c0]" size={20} />
+                                <input
+                                    type="text"
+                                    placeholder="Search name or paste address"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="w-full bg-[#0d111c] border border-[#293249] rounded-xl py-3 pl-12 pr-4 text-white placeholder-[#5d6785] focus:border-[#4c82fb] outline-none transition-colors"
+                                />
+                            </div>
 
-                {/* Token List */}
-                <div className="flex-1 overflow-y-auto p-2">
-                    {filteredTokens.map((token) => (
-                        <button
-                            key={token.symbol}
-                            onClick={() => { onSelect(token); onClose(); }}
-                            className="w-full flex items-center justify-between p-3 hover:bg-[#131a2a] rounded-xl transition-colors group"
-                        >
-                            <div className="flex items-center gap-3">
-                                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-sm font-bold text-white shadow-lg">
-                                    {token.symbol[0]}
-                                </div>
-                                <div className="flex flex-col items-start">
-                                    <span className="text-white font-medium text-lg">{token.symbol}</span>
-                                    <span className="text-[#98a1c0] text-sm group-hover:text-[#98a1c0]/80">{token.name}</span>
+                            <div className="flex flex-wrap gap-2 mb-4">
+                                {COMMON_TOKENS.map((token) => (
+                                    <button
+                                        key={token.symbol}
+                                        onClick={() => {
+                                            onSelect(token)
+                                            onClose()
+                                        }}
+                                        className="flex items-center gap-2 bg-[#0d111c] border border-[#293249] hover:border-[#4c82fb] rounded-full px-3 py-1.5 transition-all group"
+                                    >
+                                        <div className="w-5 h-5 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-[8px] font-bold text-white">
+                                            {token.symbol[0]}
+                                        </div>
+                                        <span className="text-white font-medium text-sm group-hover:text-[#4c82fb] transition-colors">{token.symbol}</span>
+                                    </button>
+                                ))}
+                            </div>
+
+                            <div className="border-t border-[#293249] pt-4">
+                                <div className="text-[#98a1c0] text-sm mb-2">Popular tokens</div>
+                                <div className="flex flex-col gap-1 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                                    {COMMON_TOKENS.filter(t => t.name.toLowerCase().includes(searchQuery.toLowerCase()) || t.symbol.toLowerCase().includes(searchQuery.toLowerCase())).map((token) => (
+                                        <button
+                                            key={token.symbol}
+                                            onClick={() => {
+                                                onSelect(token)
+                                                onClose()
+                                            }}
+                                            className="flex items-center justify-between p-2 hover:bg-[#293249]/50 rounded-xl transition-colors group"
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-xs font-bold text-white shadow-lg">
+                                                    {token.symbol[0]}
+                                                </div>
+                                                <div className="text-left">
+                                                    <div className="text-white font-medium group-hover:text-[#4c82fb] transition-colors">{token.name}</div>
+                                                    <div className="text-[#5d6785] text-xs">{token.symbol}</div>
+                                                </div>
+                                            </div>
+                                            {/* Balance placeholder */}
+                                            <div className="text-white text-sm">0</div>
+                                        </button>
+                                    ))}
                                 </div>
                             </div>
-                            {/* Balance placeholder */}
-                            <span className="text-white font-medium">0</span>
-                        </button>
-                    ))}
-                    {filteredTokens.length === 0 && (
-                        <div className="p-8 text-center text-[#98a1c0]">
-                            No tokens found.
                         </div>
-                    )}
+                    </motion.div>
                 </div>
-            </div>
-        </div>
+            )}
+        </AnimatePresence>
     )
 }
