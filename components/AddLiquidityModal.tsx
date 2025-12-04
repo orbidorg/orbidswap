@@ -173,20 +173,20 @@ export function AddLiquidityModal({ isOpen, onClose }: AddLiquidityModalProps) {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
-                        className="w-full max-w-md bg-[#131a2a] rounded-3xl border border-[#293249] overflow-hidden shadow-2xl"
+                        className="w-full max-w-md bg-white dark:bg-[#131a2a] rounded-3xl border border-gray-200 dark:border-[#293249] overflow-hidden shadow-2xl"
                     >
-                        <div className="p-5 border-b border-[#293249] flex justify-between items-center">
-                            <h3 className="text-white font-medium text-lg">Add Liquidity</h3>
-                            <button onClick={onClose} className="text-[#98a1c0] hover:text-white">
+                        <div className="p-5 border-b border-gray-200 dark:border-[#293249] flex justify-between items-center">
+                            <h3 className="text-gray-900 dark:text-white font-medium text-lg">Add Liquidity</h3>
+                            <button onClick={onClose} className="text-gray-500 dark:text-[#98a1c0] hover:text-gray-900 dark:hover:text-white">
                                 <FiX size={24} />
                             </button>
                         </div>
 
                         <div className="p-5 flex flex-col gap-4">
                             {/* Token A */}
-                            <div className="bg-[#0d111c] p-4 rounded-2xl border border-[#293249]">
+                            <div className="bg-gray-50 dark:bg-[#0d111c] p-4 rounded-2xl border border-gray-200 dark:border-[#293249]">
                                 <div className="flex justify-between mb-2">
-                                    <span className="text-[#98a1c0] text-sm">Input</span>
+                                    <span className="text-gray-500 dark:text-[#98a1c0] text-sm">Input</span>
                                 </div>
                                 <div className="flex items-center gap-4">
                                     <input
@@ -194,24 +194,24 @@ export function AddLiquidityModal({ isOpen, onClose }: AddLiquidityModalProps) {
                                         placeholder="0.0"
                                         value={amountA}
                                         onChange={(e) => setAmountA(e.target.value)}
-                                        className="w-full bg-transparent text-3xl text-white outline-none placeholder-[#5d6785]"
+                                        className="w-full bg-transparent text-3xl text-gray-900 dark:text-white outline-none placeholder-gray-400 dark:placeholder-[#5d6785]"
                                     />
-                                    <button onClick={() => openSelector('A')} className="flex items-center gap-2 bg-[#293249] px-3 py-1.5 rounded-full text-white shrink-0">
+                                    <button onClick={() => openSelector('A')} className="flex items-center gap-2 bg-white dark:bg-[#293249] px-3 py-1.5 rounded-full text-gray-900 dark:text-white shrink-0 shadow-sm dark:shadow-none">
                                         {tokenA ? tokenA.symbol : 'Select'} <FiArrowDown />
                                     </button>
                                 </div>
                             </div>
 
                             <div className="flex justify-center -my-2 z-10">
-                                <div className="bg-[#131a2a] p-1.5 rounded-xl border-[4px] border-[#0d111c]">
-                                    <FiPlus className="text-[#98a1c0]" />
+                                <div className="bg-white dark:bg-[#131a2a] p-1.5 rounded-xl border-[4px] border-gray-50 dark:border-[#0d111c]">
+                                    <FiPlus className="text-gray-500 dark:text-[#98a1c0]" />
                                 </div>
                             </div>
 
                             {/* Token B */}
-                            <div className="bg-[#0d111c] p-4 rounded-2xl border border-[#293249]">
+                            <div className="bg-gray-50 dark:bg-[#0d111c] p-4 rounded-2xl border border-gray-200 dark:border-[#293249]">
                                 <div className="flex justify-between mb-2">
-                                    <span className="text-[#98a1c0] text-sm">Input</span>
+                                    <span className="text-gray-500 dark:text-[#98a1c0] text-sm">Input</span>
                                 </div>
                                 <div className="flex items-center gap-4">
                                     <input
@@ -219,9 +219,9 @@ export function AddLiquidityModal({ isOpen, onClose }: AddLiquidityModalProps) {
                                         placeholder="0.0"
                                         value={amountB}
                                         onChange={(e) => setAmountB(e.target.value)}
-                                        className="w-full bg-transparent text-3xl text-white outline-none placeholder-[#5d6785]"
+                                        className="w-full bg-transparent text-3xl text-gray-900 dark:text-white outline-none placeholder-gray-400 dark:placeholder-[#5d6785]"
                                     />
-                                    <button onClick={() => openSelector('B')} className="flex items-center gap-2 bg-[#293249] px-3 py-1.5 rounded-full text-white shrink-0">
+                                    <button onClick={() => openSelector('B')} className="flex items-center gap-2 bg-white dark:bg-[#293249] px-3 py-1.5 rounded-full text-gray-900 dark:text-white shrink-0 shadow-sm dark:shadow-none">
                                         {tokenB ? tokenB.symbol : 'Select'} <FiArrowDown />
                                     </button>
                                 </div>
@@ -231,7 +231,7 @@ export function AddLiquidityModal({ isOpen, onClose }: AddLiquidityModalProps) {
                             <button
                                 onClick={handleAddLiquidity}
                                 disabled={isPending || !amountA || !amountB}
-                                className="w-full bg-[#4c82fb] hover:bg-[#3b66c9] text-white font-semibold text-lg sm:text-xl py-3 sm:py-4 rounded-2xl mt-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-[0.98]"
+                                className="w-full bg-black dark:bg-[#4c82fb] hover:bg-gray-800 dark:hover:bg-[#3b66c9] text-white font-semibold text-lg sm:text-xl py-3 sm:py-4 rounded-2xl mt-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-[0.98]"
                             >
                                 {isPending ? 'Adding...' : 'Add Liquidity'}
                             </button>

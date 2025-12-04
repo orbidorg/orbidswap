@@ -1,18 +1,26 @@
 'use client'
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { useState, type ReactNode } from 'react'
+import { ThemeProvider } from 'next-themes'
+import { ReactNode, useEffect, useState } from 'react'
 import { WagmiProvider } from 'wagmi'
-
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { config } from '@/config/wagmi'
 
+const queryClient = new QueryClient()
+
 export function Providers({ children }: { children: ReactNode }) {
-    const [queryClient] = useState(() => new QueryClient())
+    const [mounted, setMounted] = useState(false)
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
 
     return (
         <WagmiProvider config={config}>
             <QueryClientProvider client={queryClient}>
-                {children}
+                <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+                    {mounted && children}
+                </ThemeProvider>
             </QueryClientProvider>
         </WagmiProvider>
     )

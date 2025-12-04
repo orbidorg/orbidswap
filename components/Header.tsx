@@ -6,6 +6,7 @@ import { FiSearch, FiMenu, FiX, FiChevronDown } from 'react-icons/fi'
 import Link from 'next/link'
 import { useState } from 'react'
 import { UserWalletPanel } from './UserWalletPanel'
+import { ThemeToggle } from './ThemeToggle'
 
 export function Header() {
     const { isConnected } = useAccount()
@@ -19,14 +20,14 @@ export function Header() {
     ]
 
     return (
-        <header className="sticky top-0 z-50 flex items-center justify-between px-4 py-3 bg-[#0d111c] border-b border-[#293249]">
+        <header className="sticky top-0 z-50 flex items-center justify-between px-4 py-3 bg-white dark:bg-[#0d111c] border-b border-gray-200 dark:border-[#293249]">
             {/* Left: Logo & Nav */}
             <div className="flex items-center gap-8">
                 <Link href="/" className="flex items-center gap-2">
                     <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-violet-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
                         O
                     </div>
-                    <span className="text-xl font-bold text-white hidden sm:block">OrbIdSwap</span>
+                    <span className="text-xl font-bold text-gray-900 dark:text-white hidden sm:block">OrbIdSwap</span>
                 </Link>
 
                 {/* Desktop Nav */}
@@ -35,7 +36,7 @@ export function Header() {
                         <Link
                             key={link.name}
                             href={link.href}
-                            className="text-[#98a1c0] hover:text-white font-medium transition-colors"
+                            className="text-gray-500 dark:text-[#98a1c0] hover:text-gray-900 dark:hover:text-white font-medium transition-colors"
                         >
                             {link.name}
                         </Link>
@@ -46,16 +47,16 @@ export function Header() {
             {/* Center: Search (Desktop) */}
             <div className="hidden md:flex flex-1 max-w-md mx-4">
                 <div className="relative w-full group">
-                    <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-[#98a1c0] group-focus-within:text-white">
+                    <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gray-400 dark:text-[#98a1c0] group-focus-within:text-gray-900 dark:group-focus-within:text-white">
                         <FiSearch size={18} />
                     </div>
                     <input
                         type="text"
                         placeholder="Search tokens and pools"
-                        className="w-full bg-[#131a2a] border border-[#293249] rounded-xl py-2.5 pl-10 pr-4 text-white placeholder-[#98a1c0] focus:outline-none focus:border-[#4c82fb] focus:ring-1 focus:ring-[#4c82fb] transition-all"
+                        className="w-full bg-gray-100 dark:bg-[#131a2a] border border-transparent dark:border-[#293249] rounded-xl py-2.5 pl-10 pr-4 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-[#98a1c0] focus:outline-none focus:border-[#4c82fb] focus:ring-1 focus:ring-[#4c82fb] transition-all"
                     />
                     <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-                        <span className="bg-[#293249] text-[#98a1c0] text-xs px-1.5 py-0.5 rounded">/</span>
+                        <span className="bg-gray-200 dark:bg-[#293249] text-gray-500 dark:text-[#98a1c0] text-xs px-1.5 py-0.5 rounded">/</span>
                     </div>
                 </div>
             </div>
@@ -63,17 +64,19 @@ export function Header() {
             {/* Right: Wallet & Mobile Menu */}
             <div className="flex items-center gap-3">
                 {/* Network Selector (Static for now) */}
-                <div className="hidden sm:flex items-center gap-2 bg-[#131a2a] hover:bg-[#293249] px-3 py-2 rounded-xl cursor-pointer transition-colors">
+                <div className="hidden sm:flex items-center gap-2 bg-gray-100 dark:bg-[#131a2a] hover:bg-gray-200 dark:hover:bg-[#293249] px-3 py-2 rounded-xl cursor-pointer transition-colors">
                     <div className="w-5 h-5 rounded-full bg-blue-500"></div>
-                    <FiChevronDown size={16} className="text-[#98a1c0]" />
+                    <FiChevronDown size={16} className="text-gray-500 dark:text-[#98a1c0]" />
                 </div>
+
+                <ThemeToggle />
 
                 {isConnected ? (
                     <UserWalletPanel />
                 ) : (
                     <button
                         onClick={() => connect({ connector: injected() })}
-                        className="px-5 py-2.5 bg-[#4c82fb]/10 hover:bg-[#4c82fb]/20 text-[#4c82fb] font-semibold rounded-xl transition-all active:scale-95"
+                        className="px-5 py-2.5 bg-black dark:bg-[#4c82fb]/10 hover:bg-gray-800 dark:hover:bg-[#4c82fb]/20 text-white dark:text-[#4c82fb] font-semibold rounded-xl transition-all active:scale-95"
                     >
                         Connect
                     </button>
@@ -81,7 +84,7 @@ export function Header() {
 
                 {/* Mobile Menu Button */}
                 <button
-                    className="md:hidden p-2.5 text-[#98a1c0] hover:text-white hover:bg-[#293249] rounded-xl transition-colors"
+                    className="md:hidden p-2.5 text-gray-500 dark:text-[#98a1c0] hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#293249] rounded-xl transition-colors"
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 >
                     {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
@@ -90,25 +93,25 @@ export function Header() {
 
             {/* Mobile Menu Overlay */}
             {isMobileMenuOpen && (
-                <div className="absolute top-full left-0 right-0 bg-[#0d111c] border-b border-[#293249] p-4 md:hidden flex flex-col gap-4 shadow-xl">
+                <div className="absolute top-full left-0 right-0 bg-white dark:bg-[#0d111c] border-b border-gray-200 dark:border-[#293249] p-4 md:hidden flex flex-col gap-4 shadow-xl">
                     {navLinks.map((link) => (
                         <Link
                             key={link.name}
                             href={link.href}
-                            className="text-[#98a1c0] hover:text-white font-medium py-2"
+                            className="text-gray-500 dark:text-[#98a1c0] hover:text-gray-900 dark:hover:text-white font-medium py-2"
                             onClick={() => setIsMobileMenuOpen(false)}
                         >
                             {link.name}
                         </Link>
                     ))}
                     <div className="relative w-full">
-                        <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-[#98a1c0]">
+                        <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gray-400 dark:text-[#98a1c0]">
                             <FiSearch size={18} />
                         </div>
                         <input
                             type="text"
                             placeholder="Search tokens"
-                            className="w-full bg-[#131a2a] border border-[#293249] rounded-xl py-2.5 pl-10 pr-4 text-white placeholder-[#98a1c0] focus:outline-none focus:border-[#4c82fb]"
+                            className="w-full bg-gray-100 dark:bg-[#131a2a] border border-transparent dark:border-[#293249] rounded-xl py-2.5 pl-10 pr-4 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-[#98a1c0] focus:outline-none focus:border-[#4c82fb]"
                         />
                     </div>
                 </div>

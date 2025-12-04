@@ -110,56 +110,56 @@ export default function Pool() {
     }
 
     return (
-        <div className="min-h-screen bg-[#0d111c] text-white font-sans selection:bg-[#4c82fb] selection:text-white">
+        <div className="min-h-screen bg-white dark:bg-[#0d111c] text-gray-900 dark:text-white font-sans selection:bg-black dark:selection:bg-[#4c82fb] selection:text-white">
             <Header />
             <main className="flex flex-col items-center justify-center p-4 mt-20">
                 <div className="w-full max-w-2xl">
                     <div className="flex justify-between items-center mb-8">
-                        <h1 className="text-4xl font-bold">Pools</h1>
+                        <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Pools</h1>
                         <button
                             onClick={() => setIsAddLiquidityOpen(true)}
-                            className="bg-[#4c82fb] hover:bg-[#3b66c9] text-white font-semibold px-4 py-2 rounded-xl transition-colors"
+                            className="bg-black dark:bg-[#4c82fb] hover:bg-gray-800 dark:hover:bg-[#3b66c9] text-white font-semibold px-4 py-2 rounded-xl transition-colors shadow-lg shadow-black/10 dark:shadow-blue-500/20"
                         >
                             + New Position
                         </button>
                     </div>
 
                     {!isConnected ? (
-                        <div className="bg-[#131a2a] rounded-3xl p-8 border border-[#293249] text-center">
-                            <p className="text-[#98a1c0] text-lg">Connect your wallet to view your liquidity positions.</p>
+                        <div className="bg-white dark:bg-[#131a2a] rounded-3xl p-8 border border-gray-200 dark:border-[#293249] text-center shadow-sm dark:shadow-none">
+                            <p className="text-gray-500 dark:text-[#98a1c0] text-lg">Connect your wallet to view your liquidity positions.</p>
                         </div>
                     ) : userPositions.length === 0 ? (
-                        <div className="bg-[#131a2a] rounded-3xl p-8 border border-[#293249] text-center">
-                            <p className="text-[#98a1c0] text-lg">No active liquidity positions found.</p>
-                            <p className="text-[#5d6785] text-sm mt-2">Scanning first {pairsToFetch} pairs...</p>
+                        <div className="bg-white dark:bg-[#131a2a] rounded-3xl p-8 border border-gray-200 dark:border-[#293249] text-center shadow-sm dark:shadow-none">
+                            <p className="text-gray-500 dark:text-[#98a1c0] text-lg">No active liquidity positions found.</p>
+                            <p className="text-gray-400 dark:text-[#5d6785] text-sm mt-2">Scanning first {pairsToFetch} pairs...</p>
                         </div>
                     ) : (
                         <div className="grid gap-4">
                             {userPositions.map((pos, i) => (
-                                <div key={i} className="bg-[#131a2a] rounded-3xl p-6 border border-[#293249] hover:border-[#4c82fb] transition-colors">
+                                <div key={i} className="bg-white dark:bg-[#131a2a] rounded-3xl p-6 border border-gray-200 dark:border-[#293249] hover:border-black dark:hover:border-[#4c82fb] transition-colors shadow-sm dark:shadow-none">
                                     <div className="flex justify-between items-center mb-4">
                                         <div className="flex items-center gap-2">
                                             <div className="flex -space-x-2">
-                                                <div className="w-8 h-8 rounded-full bg-blue-500 border-2 border-[#131a2a]"></div>
-                                                <div className="w-8 h-8 rounded-full bg-purple-500 border-2 border-[#131a2a]"></div>
+                                                <div className="w-8 h-8 rounded-full bg-blue-500 border-2 border-white dark:border-[#131a2a]"></div>
+                                                <div className="w-8 h-8 rounded-full bg-purple-500 border-2 border-white dark:border-[#131a2a]"></div>
                                             </div>
-                                            <span className="font-bold text-lg">LP Token</span>
-                                            <span className="text-sm text-[#98a1c0] bg-[#0d111c] px-2 py-1 rounded-lg">{pos.pairAddress.slice(0, 6)}...{pos.pairAddress.slice(-4)}</span>
+                                            <span className="font-bold text-lg text-gray-900 dark:text-white">LP Token</span>
+                                            <span className="text-sm text-gray-500 dark:text-[#98a1c0] bg-gray-100 dark:bg-[#0d111c] px-2 py-1 rounded-lg">{pos.pairAddress.slice(0, 6)}...{pos.pairAddress.slice(-4)}</span>
                                         </div>
                                         <button
                                             onClick={() => handleRemoveClick(pos)}
-                                            className="text-[#4c82fb] font-medium hover:text-[#3b66c9] transition-colors"
+                                            className="text-black dark:text-[#4c82fb] font-medium hover:text-gray-700 dark:hover:text-[#3b66c9] transition-colors"
                                         >
                                             Manage
                                         </button>
                                     </div>
                                     <div className="flex justify-between text-sm">
-                                        <span className="text-[#98a1c0]">Your Liquidity</span>
-                                        <span className="text-white font-medium">{parseFloat(pos.liquidity).toFixed(4)} LP</span>
+                                        <span className="text-gray-500 dark:text-[#98a1c0]">Your Liquidity</span>
+                                        <span className="text-gray-900 dark:text-white font-medium">{parseFloat(pos.liquidity).toFixed(4)} LP</span>
                                     </div>
                                     <div className="flex justify-between text-sm mt-1">
-                                        <span className="text-[#98a1c0]">Share of Pool</span>
-                                        <span className="text-white font-medium">{pos.share}</span>
+                                        <span className="text-gray-500 dark:text-[#98a1c0]">Share of Pool</span>
+                                        <span className="text-gray-900 dark:text-white font-medium">{pos.share}</span>
                                     </div>
                                 </div>
                             ))}

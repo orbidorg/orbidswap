@@ -113,53 +113,53 @@ export function RemoveLiquidityModal({ isOpen, onClose, pairAddress, tokenA, tok
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
-                        className="w-full max-w-md bg-[#131a2a] rounded-3xl border border-[#293249] overflow-hidden shadow-2xl"
+                        className="w-full max-w-md bg-white dark:bg-[#131a2a] rounded-3xl border border-gray-200 dark:border-[#293249] overflow-hidden shadow-2xl"
                     >
-                        <div className="p-5 border-b border-[#293249] flex justify-between items-center">
-                            <h3 className="text-white font-medium text-lg">Remove Liquidity</h3>
-                            <button onClick={onClose} className="text-[#98a1c0] hover:text-white">
+                        <div className="p-5 border-b border-gray-200 dark:border-[#293249] flex justify-between items-center">
+                            <h3 className="text-gray-900 dark:text-white font-medium text-lg">Remove Liquidity</h3>
+                            <button onClick={onClose} className="text-gray-500 dark:text-[#98a1c0] hover:text-gray-900 dark:hover:text-white">
                                 <FiX size={24} />
                             </button>
                         </div>
 
                         <div className="p-5 flex flex-col gap-6">
-                            <div className="text-white text-3xl font-medium">{percentage}%</div>
+                            <div className="text-gray-900 dark:text-white text-3xl font-medium">{percentage}%</div>
                             <input
                                 type="range"
                                 min="0"
                                 max="100"
                                 value={percentage}
                                 onChange={(e) => setPercentage(parseInt(e.target.value))}
-                                className="w-full h-2 bg-[#293249] rounded-lg appearance-none cursor-pointer accent-[#4c82fb]"
+                                className="w-full h-2 bg-gray-200 dark:bg-[#293249] rounded-lg appearance-none cursor-pointer accent-black dark:accent-[#4c82fb]"
                             />
                             <div className="flex justify-between gap-2">
                                 {[25, 50, 75, 100].map((p) => (
                                     <button
                                         key={p}
                                         onClick={() => setPercentage(p)}
-                                        className="bg-[#131a2a] border border-[#293249] hover:border-[#4c82fb] text-[#98a1c0] hover:text-white py-1 px-3 rounded-xl text-sm transition-colors"
+                                        className="bg-gray-100 dark:bg-[#131a2a] border border-gray-200 dark:border-[#293249] hover:border-black dark:hover:border-[#4c82fb] text-gray-500 dark:text-[#98a1c0] hover:text-gray-900 dark:hover:text-white py-1 px-3 rounded-xl text-sm transition-colors"
                                     >
                                         {p}%
                                     </button>
                                 ))}
                             </div>
 
-                            <div className="bg-[#0d111c] p-4 rounded-2xl border border-[#293249]">
+                            <div className="bg-gray-50 dark:bg-[#0d111c] p-4 rounded-2xl border border-gray-200 dark:border-[#293249]">
                                 <div className="flex justify-between mb-2">
-                                    <span className="text-[#98a1c0] text-sm">You receive</span>
+                                    <span className="text-gray-500 dark:text-[#98a1c0] text-sm">You receive</span>
                                 </div>
                                 <div className="flex justify-between items-center mb-2">
-                                    <div className="text-white text-xl font-medium">0.00</div>
+                                    <div className="text-gray-900 dark:text-white text-xl font-medium">0.00</div>
                                     <div className="flex items-center gap-2">
                                         <div className="w-5 h-5 rounded-full bg-blue-500"></div>
-                                        <span className="text-white">{tokenA.symbol}</span>
+                                        <span className="text-gray-900 dark:text-white">{tokenA.symbol}</span>
                                     </div>
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <div className="text-white text-xl font-medium">0.00</div>
+                                    <div className="text-gray-900 dark:text-white text-xl font-medium">0.00</div>
                                     <div className="flex items-center gap-2">
                                         <div className="w-5 h-5 rounded-full bg-purple-500"></div>
-                                        <span className="text-white">{tokenB.symbol}</span>
+                                        <span className="text-gray-900 dark:text-white">{tokenB.symbol}</span>
                                     </div>
                                 </div>
                             </div>
@@ -168,7 +168,7 @@ export function RemoveLiquidityModal({ isOpen, onClose, pairAddress, tokenA, tok
                                 <button
                                     onClick={handleApprove}
                                     disabled={isPending}
-                                    className="w-full bg-[#4c82fb] hover:bg-[#3b66c9] text-white font-semibold text-lg sm:text-xl py-3 sm:py-4 rounded-2xl transition-all disabled:opacity-50 active:scale-[0.98]"
+                                    className="w-full bg-black dark:bg-[#4c82fb] hover:bg-gray-800 dark:hover:bg-[#3b66c9] text-white font-semibold text-lg sm:text-xl py-3 sm:py-4 rounded-2xl transition-all disabled:opacity-50 active:scale-[0.98]"
                                 >
                                     {isPending ? 'Approving...' : 'Approve'}
                                 </button>
@@ -176,7 +176,7 @@ export function RemoveLiquidityModal({ isOpen, onClose, pairAddress, tokenA, tok
                                 <button
                                     onClick={handleRemoveLiquidity}
                                     disabled={isPending}
-                                    className="w-full bg-[#4c82fb] hover:bg-[#3b66c9] text-white font-semibold text-lg sm:text-xl py-3 sm:py-4 rounded-2xl transition-all disabled:opacity-50 active:scale-[0.98]"
+                                    className="w-full bg-black dark:bg-[#4c82fb] hover:bg-gray-800 dark:hover:bg-[#3b66c9] text-white font-semibold text-lg sm:text-xl py-3 sm:py-4 rounded-2xl transition-all disabled:opacity-50 active:scale-[0.98]"
                                 >
                                     {isPending ? 'Removing...' : 'Remove'}
                                 </button>
