@@ -8,6 +8,9 @@ const nextConfig: NextConfig = {
       '@coinbase/wallet-sdk': false,
       '@gemini-wallet/core': false,
       '@metamask/sdk': false,
+      '@safe-global/safe-apps-sdk': false,
+      '@safe-global/safe-apps-provider': false,
+      '@walletconnect/ethereum-provider': false,
       'porto': false,
       'porto/internal': false,
     };
