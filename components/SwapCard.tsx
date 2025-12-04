@@ -218,7 +218,7 @@ export function SwapCard() {
             return (
                 <button
                     onClick={() => connect({ connector: injected() })}
-                    className="w-full bg-[#4c82fb]/10 hover:bg-[#4c82fb]/20 text-[#4c82fb] font-semibold text-xl py-4 rounded-2xl transition-all"
+                    className="w-full bg-[#4c82fb]/10 hover:bg-[#4c82fb]/20 text-[#4c82fb] font-semibold text-lg sm:text-xl py-3 sm:py-4 rounded-2xl transition-all active:scale-[0.98]"
                 >
                     Connect Wallet
                 </button>
@@ -227,7 +227,7 @@ export function SwapCard() {
 
         if (!sellAmount) {
             return (
-                <button className="w-full bg-[#293249] text-[#5d6785] font-semibold text-xl py-4 rounded-2xl cursor-not-allowed">
+                <button className="w-full bg-[#293249] text-[#5d6785] font-semibold text-lg sm:text-xl py-3 sm:py-4 rounded-2xl cursor-not-allowed">
                     Enter an amount
                 </button>
             )
@@ -235,7 +235,7 @@ export function SwapCard() {
 
         if (!buyToken) {
             return (
-                <button className="w-full bg-[#293249] text-[#5d6785] font-semibold text-xl py-4 rounded-2xl cursor-not-allowed">
+                <button className="w-full bg-[#293249] text-[#5d6785] font-semibold text-lg sm:text-xl py-3 sm:py-4 rounded-2xl cursor-not-allowed">
                     Select a token
                 </button>
             )
@@ -251,7 +251,7 @@ export function SwapCard() {
                     <button
                         onClick={handleApprove}
                         disabled={isWritePending || isConfirming}
-                        className="w-full bg-[#4c82fb] hover:bg-[#3b66c9] text-white font-semibold text-xl py-4 rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full bg-[#4c82fb] hover:bg-[#3b66c9] text-white font-semibold text-lg sm:text-xl py-3 sm:py-4 rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
                     >
                         {isWritePending ? 'Approving...' : `Approve ${sellToken.symbol}`}
                     </button>
@@ -263,7 +263,7 @@ export function SwapCard() {
             <button
                 onClick={handleSwap}
                 disabled={isWritePending || isConfirming}
-                className="w-full bg-[#4c82fb] hover:bg-[#3b66c9] text-white font-semibold text-xl py-4 rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-[#4c82fb] hover:bg-[#3b66c9] text-white font-semibold text-lg sm:text-xl py-3 sm:py-4 rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
             >
                 {isWritePending || isConfirming ? 'Swapping...' : 'Swap'}
             </button>
@@ -286,7 +286,7 @@ export function SwapCard() {
                     </div>
                     <button
                         onClick={() => setIsSettingsOpen(true)}
-                        className="text-[#98a1c0] hover:text-white transition-colors"
+                        className="text-[#98a1c0] hover:text-white transition-colors p-2 hover:bg-[#293249] rounded-xl"
                     >
                         <FiSettings size={20} />
                     </button>

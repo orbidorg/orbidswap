@@ -100,12 +100,12 @@ export default function LandingPage() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link href="/swap">
-              <button className="bg-[#4c82fb] hover:bg-[#3b66c9] text-white font-semibold text-lg px-8 py-4 rounded-2xl transition-all flex items-center gap-2 shadow-lg shadow-blue-500/25 hover:scale-105 active:scale-95">
+              <button className="bg-[#4c82fb] hover:bg-[#3b66c9] text-white font-semibold text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-2xl transition-all flex items-center gap-2 shadow-lg shadow-blue-500/25 hover:scale-105 active:scale-95 w-full sm:w-auto justify-center">
                 Launch App <FiArrowRight />
               </button>
             </Link>
             <Link href="/explore">
-              <button className="bg-[#131a2a] border border-[#293249] hover:border-[#4c82fb] text-white font-semibold text-lg px-8 py-4 rounded-2xl transition-all hover:scale-105 active:scale-95">
+              <button className="bg-[#131a2a] border border-[#293249] hover:border-[#4c82fb] text-white font-semibold text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-2xl transition-all hover:scale-105 active:scale-95 w-full sm:w-auto">
                 Explore Pools
               </button>
             </Link>

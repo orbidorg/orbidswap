@@ -168,7 +168,7 @@ export function RemoveLiquidityModal({ isOpen, onClose, pairAddress, tokenA, tok
                                 <button
                                     onClick={handleApprove}
                                     disabled={isPending}
-                                    className="w-full bg-[#4c82fb] hover:bg-[#3b66c9] text-white font-semibold py-4 rounded-2xl transition-colors disabled:opacity-50"
+                                    className="w-full bg-[#4c82fb] hover:bg-[#3b66c9] text-white font-semibold text-lg sm:text-xl py-3 sm:py-4 rounded-2xl transition-all disabled:opacity-50 active:scale-[0.98]"
                                 >
                                     {isPending ? 'Approving...' : 'Approve'}
                                 </button>
@@ -176,7 +176,7 @@ export function RemoveLiquidityModal({ isOpen, onClose, pairAddress, tokenA, tok
                                 <button
                                     onClick={handleRemoveLiquidity}
                                     disabled={isPending}
-                                    className="w-full bg-[#4c82fb] hover:bg-[#3b66c9] text-white font-semibold py-4 rounded-2xl transition-colors disabled:opacity-50"
+                                    className="w-full bg-[#4c82fb] hover:bg-[#3b66c9] text-white font-semibold text-lg sm:text-xl py-3 sm:py-4 rounded-2xl transition-all disabled:opacity-50 active:scale-[0.98]"
                                 >
                                     {isPending ? 'Removing...' : 'Remove'}
                                 </button>

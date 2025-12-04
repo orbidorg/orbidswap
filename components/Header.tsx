@@ -73,7 +73,7 @@ export function Header() {
                 ) : (
                     <button
                         onClick={() => connect({ connector: injected() })}
-                        className="px-4 py-2 bg-[#4c82fb]/10 hover:bg-[#4c82fb]/20 text-[#4c82fb] font-semibold rounded-xl transition-colors"
+                        className="px-5 py-2.5 bg-[#4c82fb]/10 hover:bg-[#4c82fb]/20 text-[#4c82fb] font-semibold rounded-xl transition-all active:scale-95"
                     >
                         Connect
                     </button>
@@ -81,7 +81,7 @@ export function Header() {
 
                 {/* Mobile Menu Button */}
                 <button
-                    className="md:hidden p-2 text-[#98a1c0] hover:text-white"
+                    className="md:hidden p-2.5 text-[#98a1c0] hover:text-white hover:bg-[#293249] rounded-xl transition-colors"
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 >
                     {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}

@@ -231,7 +231,7 @@ export function AddLiquidityModal({ isOpen, onClose }: AddLiquidityModalProps) {
                             <button
                                 onClick={handleAddLiquidity}
                                 disabled={isPending || !amountA || !amountB}
-                                className="w-full bg-[#4c82fb] hover:bg-[#3b66c9] text-white font-semibold py-4 rounded-2xl mt-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                className="w-full bg-[#4c82fb] hover:bg-[#3b66c9] text-white font-semibold text-lg sm:text-xl py-3 sm:py-4 rounded-2xl mt-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-[0.98]"
                             >
                                 {isPending ? 'Adding...' : 'Add Liquidity'}
                             </button>
