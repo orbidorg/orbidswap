@@ -4,6 +4,8 @@ import Link from 'next/link'
 import { FiGithub, FiTwitter, FiBook, FiMessageCircle, FiGlobe } from 'react-icons/fi'
 import { FaDiscord } from 'react-icons/fa'
 
+import { Spotlight } from './Spotlight'
+
 export function Footer() {
     return (
         <footer className="bg-white dark:bg-[#0d111c] border-t border-gray-200 dark:border-[#293249] pt-20 pb-12 px-4 sm:px-6 lg:px-8">
@@ -21,15 +23,21 @@ export function Footer() {
                         Empowering the next generation of human-centric DeFi.
                     </p>
                     <div className="flex gap-4">
-                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gray-100 dark:bg-[#131a2a] flex items-center justify-center text-gray-500 dark:text-[#98a1c0] hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all">
-                            <FiTwitter size={18} />
-                        </a>
-                        <a href="https://github.com/orbidorg/orbidswap" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gray-100 dark:bg-[#131a2a] flex items-center justify-center text-gray-500 dark:text-[#98a1c0] hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all">
-                            <FiGithub size={18} />
-                        </a>
-                        <a href="https://discord.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gray-100 dark:bg-[#131a2a] flex items-center justify-center text-gray-500 dark:text-[#98a1c0] hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all">
-                            <FaDiscord size={18} />
-                        </a>
+                        <Spotlight className="rounded-full">
+                            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gray-100 dark:bg-[#131a2a] flex items-center justify-center text-gray-500 dark:text-[#98a1c0] hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all relative z-10">
+                                <FiTwitter size={18} />
+                            </a>
+                        </Spotlight>
+                        <Spotlight className="rounded-full">
+                            <a href="https://github.com/orbidorg/orbidswap" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gray-100 dark:bg-[#131a2a] flex items-center justify-center text-gray-500 dark:text-[#98a1c0] hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all relative z-10">
+                                <FiGithub size={18} />
+                            </a>
+                        </Spotlight>
+                        <Spotlight className="rounded-full">
+                            <a href="https://discord.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gray-100 dark:bg-[#131a2a] flex items-center justify-center text-gray-500 dark:text-[#98a1c0] hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all relative z-10">
+                                <FaDiscord size={18} />
+                            </a>
+                        </Spotlight>
                     </div>
                 </div>
 

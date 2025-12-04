@@ -81,8 +81,19 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <main className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
-        {/* Organic Background Gradients */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[800px] bg-gradient-to-b from-blue-50/50 to-transparent dark:from-blue-900/10 dark:to-transparent rounded-full blur-[120px] -z-10 pointer-events-none" />
+        {/* Organic Background Gradients with Animation */}
+        <motion.div
+          animate={{
+            scale: [1, 1.1, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[1400px] h-[900px] bg-gradient-to-b from-blue-100/40 via-purple-100/20 to-transparent dark:from-blue-900/20 dark:via-purple-900/10 dark:to-transparent rounded-full blur-[100px] -z-10 pointer-events-none"
+        />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -90,20 +101,14 @@ export default function LandingPage() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="max-w-5xl mx-auto"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 dark:bg-[#131a2a] border border-gray-200 dark:border-[#293249] text-xs font-medium text-gray-600 dark:text-gray-400 mb-8">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-            </span>
-            Live on World Chain Sepolia
-          </div>
 
-          <h1 className="text-6xl sm:text-8xl font-bold tracking-tighter mb-8 text-gray-900 dark:text-white leading-[0.9]">
+
+          <h1 className="text-7xl sm:text-9xl font-bold tracking-tighter mb-8 text-gray-900 dark:text-white leading-[0.85] select-none">
             Swap with <br className="hidden sm:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-violet-600 dark:from-blue-400 dark:to-violet-400">confidence.</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-violet-600 to-blue-600 dark:from-blue-400 dark:via-violet-400 dark:to-blue-400 animate-gradient-x bg-[length:200%_auto]">confidence.</span>
           </h1>
 
-          <p className="text-xl sm:text-2xl text-gray-500 dark:text-[#98a1c0] mb-12 max-w-2xl mx-auto leading-relaxed font-light tracking-tight">
+          <p className="text-xl sm:text-3xl text-gray-600 dark:text-[#98a1c0] mb-12 max-w-3xl mx-auto leading-relaxed font-light tracking-tight">
             The native liquidity layer for World Chain. <br className="hidden sm:block" />
             Instant swaps, deep liquidity, and zero compromise.
           </p>

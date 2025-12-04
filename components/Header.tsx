@@ -8,6 +8,8 @@ import { useState, useEffect } from 'react'
 import { UserWalletPanel } from './UserWalletPanel'
 import { ThemeToggle } from './ThemeToggle'
 
+import { Spotlight } from './Spotlight'
+
 export function Header() {
     const { isConnected } = useAccount()
     const { connect } = useConnect()
@@ -43,13 +45,14 @@ export function Header() {
                     {/* Desktop Nav */}
                     <nav className="hidden md:flex items-center gap-1 bg-gray-100/50 dark:bg-[#131a2a]/50 p-1 rounded-full border border-gray-200/50 dark:border-[#293249]/50 backdrop-blur-sm">
                         {navLinks.map((link) => (
-                            <Link
-                                key={link.name}
-                                href={link.href}
-                                className="px-4 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-white dark:hover:bg-[#293249] rounded-full transition-all"
-                            >
-                                {link.name}
-                            </Link>
+                            <Spotlight key={link.name} className="rounded-full">
+                                <Link
+                                    href={link.href}
+                                    className="block px-4 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-[#293249]/50 rounded-full transition-all relative z-10"
+                                >
+                                    {link.name}
+                                </Link>
+                            </Spotlight>
                         ))}
                     </nav>
                 </div>
