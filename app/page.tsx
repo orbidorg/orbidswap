@@ -133,7 +133,7 @@ export default function LandingPage() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-          className="mt-24 w-full max-w-4xl"
+          className="mt-24 w-full max-w-5xl"
         >
           <div className="glass rounded-2xl p-2 flex flex-col sm:flex-row justify-between items-center divide-y sm:divide-y-0 sm:divide-x divide-gray-200/50 dark:divide-[#293249]/50">
             <div className="flex-1 p-6 flex flex-col items-center">
@@ -142,7 +142,13 @@ export default function LandingPage() {
             </div>
             <div className="flex-1 p-6 flex flex-col items-center">
               <div className="text-gray-500 dark:text-[#98a1c0] text-xs uppercase tracking-widest font-semibold mb-2">TVL (WLD)</div>
-              <div className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">{tvlEth}</div>
+              <div className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">{parseFloat(tvlEth).toLocaleString()}</div>
+            </div>
+            <div className="flex-1 p-6 flex flex-col items-center">
+              <div className="text-gray-500 dark:text-[#98a1c0] text-xs uppercase tracking-widest font-semibold mb-2">TVL (USD)</div>
+              <div className="text-4xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-violet-500">
+                ${(parseFloat(tvlEth) * 3.5).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+              </div>
             </div>
             <div className="flex-1 p-6 flex flex-col items-center">
               <div className="text-gray-500 dark:text-[#98a1c0] text-xs uppercase tracking-widest font-semibold mb-2">Gas (Gwei)</div>
