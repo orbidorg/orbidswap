@@ -13,6 +13,9 @@ import { motion } from 'framer-motion'
 import { TokenIcon } from './TokenIcon'
 import { useTokenPrices } from '../hooks/useTokenPrices'
 
+import { SwapDetails } from './SwapDetails'
+import { ReviewSwapModal } from './ReviewSwapModal'
+
 export function SwapCard() {
     const { address, isConnected } = useAccount()
     const { connect, connectors } = useConnect()
@@ -33,6 +36,8 @@ export function SwapCard() {
     // Modals State
     const [isTokenSelectorOpen, setIsTokenSelectorOpen] = useState(false)
     const [isSettingsOpen, setIsSettingsOpen] = useState(false)
+    const [isReviewOpen, setIsReviewOpen] = useState(false)
+    const [isDetailsOpen, setIsDetailsOpen] = useState(false)
     const [selectorMode, setSelectorMode] = useState<'sell' | 'buy'>('sell')
 
     // Tokens State
@@ -133,6 +138,7 @@ export function SwapCard() {
         mutation: {
             onSuccess: () => {
                 toast.success('Transaction submitted!')
+                setIsReviewOpen(false)
             },
             onError: (error) => {
                 toast.error(`Transaction failed: ${error.message.slice(0, 50)}...`)
@@ -167,7 +173,14 @@ export function SwapCard() {
         })
     }
 
-    const handleSwap = () => {
+    // Trigger Review Modal
+    const handleSwapClick = () => {
+        if (!path || !address) return
+        setIsReviewOpen(true)
+    }
+
+    // Actual Execution
+    const executeSwap = () => {
         if (!path || !address) return
 
         const amountIn = parseUnits(sellAmount, 18)
@@ -221,6 +234,33 @@ export function SwapCard() {
         }
     }
 
+    // Derived Data for Details
+    const rate = buyAmount && sellAmount && parseFloat(sellAmount) > 0
+        ? `1 ${sellToken.symbol} = ${(parseFloat(buyAmount) / parseFloat(sellAmount)).toFixed(4)} ${buyToken?.symbol}`
+        : '-'
+
+    // Fee USD (0.3% of sell amount USD)
+    const totalSellUsd = sellAmount && prices[sellToken.symbol] ? parseFloat(sellAmount) * prices[sellToken.symbol] : 0
+    const feeUsd = (totalSellUsd * 0.003).toFixed(2)
+
+    // Price Impact (Simple Diff for now: Mocking -0.05% as standard for small liquid pairs)
+    // In production this compares AmountOut vs SpotPrice
+    const priceImpact = '-0.05%'
+
+    const swapDetails = {
+        rate,
+        fee: `$${feeUsd}`,
+        networkCost: '~$0.05', // Mocked low cost for L2
+        priceImpact,
+        maxSlippage: slippage === 'auto' ? '0.50%' : `${slippage}%`,
+        routing: 'OrbidSwap API'
+    }
+
+    const usdValue = {
+        sell: totalSellUsd > 0 ? `~$${totalSellUsd.toFixed(2)}` : '$0.00',
+        buy: buyAmount && buyToken && prices[buyToken.symbol] ? `~$${(parseFloat(buyAmount) * prices[buyToken.symbol]).toFixed(2)}` : '$0.00'
+    }
+
     // Button Logic
     const renderActionButton = () => {
         if (!isConnected) {
@@ -270,7 +310,7 @@ export function SwapCard() {
 
         return (
             <button
-                onClick={handleSwap}
+                onClick={handleSwapClick}
                 disabled={isWritePending || isConfirming}
                 className="w-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white font-semibold text-base py-4 rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] shadow-lg shadow-blue-500/20"
             >
@@ -398,8 +438,19 @@ export function SwapCard() {
                     </div>
                 </div>
 
+                {/* Swap Details Accordion */}
+                {buyAmount && (
+                    <div className="mt-2">
+                        <SwapDetails
+                            isOpen={isDetailsOpen}
+                            onToggle={() => setIsDetailsOpen(!isDetailsOpen)}
+                            details={swapDetails}
+                        />
+                    </div>
+                )}
+
                 {/* Action Button - Inside Card */}
-                <div className="pt-2">
+                <div className="pt-4">
                     {renderActionButton()}
                 </div>
             </motion.div>
@@ -418,6 +469,19 @@ export function SwapCard() {
                 setSlippage={setSlippage}
                 deadline={deadline}
                 setDeadline={setDeadline}
+            />
+
+            <ReviewSwapModal
+                isOpen={isReviewOpen}
+                onClose={() => setIsReviewOpen(false)}
+                onConfirm={executeSwap}
+                isPending={isWritePending || isConfirming}
+                sellToken={sellToken}
+                buyToken={buyToken || { symbol: '?', name: 'Select Token' }}
+                sellAmount={sellAmount}
+                buyAmount={buyAmount}
+                usdValue={usdValue}
+                details={swapDetails}
             />
         </>
     )
