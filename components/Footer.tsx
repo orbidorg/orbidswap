@@ -60,7 +60,7 @@ export function Footer() {
                 <div>
                     <h3 className="text-gray-900 dark:text-white font-semibold mb-6">Developers</h3>
                     <ul className="flex flex-col gap-4 text-gray-500 dark:text-[#98a1c0] text-sm">
-                        <li><a href="#" className="hover:text-blue-500 transition-colors flex items-center gap-2">Documentation <FiBook size={14} /></a></li>
+                        <li><Link href="/docs" className="hover:text-blue-500 transition-colors flex items-center gap-2">Documentation <FiBook size={14} /></Link></li>
                         <li><a href="#" className="hover:text-blue-500 transition-colors">Github</a></li>
                         <li><a href="#" className="hover:text-blue-500 transition-colors">Audit</a></li>
                         <li><a href="#" className="hover:text-blue-500 transition-colors">Bug Bounty</a></li>
@@ -70,7 +70,7 @@ export function Footer() {
                 <div>
                     <h3 className="text-gray-900 dark:text-white font-semibold mb-6">Support</h3>
                     <ul className="flex flex-col gap-4 text-gray-500 dark:text-[#98a1c0] text-sm">
-                        <li><a href="#" className="hover:text-blue-500 transition-colors">Help Center</a></li>
+                        <li><Link href="/help" className="hover:text-blue-500 transition-colors">Help Center</Link></li>
                         <li><a href="#" className="hover:text-blue-500 transition-colors">Terms of Service</a></li>
                         <li><a href="#" className="hover:text-blue-500 transition-colors">Privacy Policy</a></li>
                         <li><a href="#" className="hover:text-blue-500 transition-colors flex items-center gap-2">Community <FiMessageCircle size={14} /></a></li>
