@@ -218,7 +218,7 @@ export function SwapCard() {
             return (
                 <button
                     onClick={() => connect({ connector: injected() })}
-                    className="w-full bg-black dark:bg-[#4c82fb]/10 hover:bg-gray-800 dark:hover:bg-[#4c82fb]/20 text-white dark:text-[#4c82fb] font-semibold text-lg sm:text-xl py-3 sm:py-4 rounded-2xl transition-all active:scale-[0.98]"
+                    className="w-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white font-semibold text-base py-4 rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-blue-500/20"
                 >
                     Connect Wallet
                 </button>
@@ -227,7 +227,7 @@ export function SwapCard() {
 
         if (!sellAmount) {
             return (
-                <button className="w-full bg-gray-100 dark:bg-[#293249] text-gray-400 dark:text-[#5d6785] font-semibold text-lg sm:text-xl py-3 sm:py-4 rounded-2xl cursor-not-allowed">
+                <button className="w-full bg-gray-100 dark:bg-[#293249] text-gray-400 dark:text-[#5d6785] font-semibold text-base py-4 rounded-2xl cursor-not-allowed">
                     Enter an amount
                 </button>
             )
@@ -235,7 +235,7 @@ export function SwapCard() {
 
         if (!buyToken) {
             return (
-                <button className="w-full bg-gray-100 dark:bg-[#293249] text-gray-400 dark:text-[#5d6785] font-semibold text-lg sm:text-xl py-3 sm:py-4 rounded-2xl cursor-not-allowed">
+                <button className="w-full bg-gray-100 dark:bg-[#293249] text-gray-400 dark:text-[#5d6785] font-semibold text-base py-4 rounded-2xl cursor-not-allowed">
                     Select a token
                 </button>
             )
@@ -251,7 +251,7 @@ export function SwapCard() {
                     <button
                         onClick={handleApprove}
                         disabled={isWritePending || isConfirming}
-                        className="w-full bg-black dark:bg-[#4c82fb] hover:bg-gray-800 dark:hover:bg-[#3b66c9] text-white font-semibold text-lg sm:text-xl py-3 sm:py-4 rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
+                        className="w-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white font-semibold text-base py-4 rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] shadow-lg shadow-blue-500/20"
                     >
                         {isWritePending ? 'Approving...' : `Approve ${sellToken.symbol}`}
                     </button>
@@ -263,7 +263,7 @@ export function SwapCard() {
             <button
                 onClick={handleSwap}
                 disabled={isWritePending || isConfirming}
-                className="w-full bg-black dark:bg-[#4c82fb] hover:bg-gray-800 dark:hover:bg-[#3b66c9] text-white font-semibold text-lg sm:text-xl py-3 sm:py-4 rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
+                className="w-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white font-semibold text-base py-4 rounded-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] shadow-lg shadow-blue-500/20"
             >
                 {isWritePending || isConfirming ? 'Swapping...' : 'Swap'}
             </button>
@@ -276,7 +276,7 @@ export function SwapCard() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
-                className="w-full max-w-[480px] bg-white dark:bg-[#0d111c] rounded-3xl p-2 border border-gray-200 dark:border-[#131a2a] shadow-xl"
+                className="w-full max-w-[480px] bg-white dark:bg-[#0d111c] rounded-3xl p-4 border border-gray-200 dark:border-[#293249] shadow-xl"
             >
                 {/* Header */}
                 <div className="flex items-center justify-between px-4 py-3 mb-2">
@@ -358,9 +358,9 @@ export function SwapCard() {
                             ) : (
                                 <button
                                     onClick={() => openTokenSelector('buy')}
-                                    className="flex items-center gap-2 bg-black dark:bg-[#4c82fb] hover:bg-gray-800 dark:hover:bg-[#3b66c9] text-white px-3 py-1.5 rounded-full transition-colors shrink-0 shadow-lg shadow-black/10 dark:shadow-blue-500/20"
+                                    className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white px-4 py-2 rounded-full transition-colors shrink-0 shadow-lg shadow-blue-500/20"
                                 >
-                                    <span className="font-semibold text-lg">Select token</span>
+                                    <span className="font-semibold">Select token</span>
                                     <FiArrowDown size={16} />
                                 </button>
                             )}
@@ -373,7 +373,7 @@ export function SwapCard() {
                 </div>
 
                 {/* Action Button - Inside Card */}
-                <div className="px-4 pb-4 pt-2">
+                <div className="pt-2">
                     {renderActionButton()}
                 </div>
             </motion.div>
