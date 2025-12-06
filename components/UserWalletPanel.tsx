@@ -68,7 +68,7 @@ export function UserWalletPanel() {
                                 <GradientIdenticon address={address} size={40} />
                                 <div>
                                     <div className="text-gray-900 dark:text-white font-bold">{shortAddress}</div>
-                                    <div className="text-gray-400 dark:text-[#5d6785] text-xs">World Chain Sepolia</div>
+                                    <div className="text-gray-400 dark:text-[#5d6785] text-xs">World Chain</div>
                                 </div>
                             </div>
                             <button onClick={() => setIsOpen(false)} className="text-gray-400 dark:text-[#5d6785] hover:text-gray-900 dark:hover:text-white p-1 hover:bg-gray-100 dark:hover:bg-[#293249] rounded-lg transition-colors">
@@ -93,8 +93,8 @@ export function UserWalletPanel() {
                                 onClick={handleCopy}
                                 whileTap={{ scale: 0.95 }}
                                 className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl transition-all text-sm font-medium ${copied
-                                        ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400'
-                                        : 'bg-gray-100 dark:bg-[#293249] hover:bg-gray-200 dark:hover:bg-[#404a67] text-gray-900 dark:text-white'
+                                    ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400'
+                                    : 'bg-gray-100 dark:bg-[#293249] hover:bg-gray-200 dark:hover:bg-[#404a67] text-gray-900 dark:text-white'
                                     }`}
                             >
                                 <AnimatePresence mode="wait">
