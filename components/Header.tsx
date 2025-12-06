@@ -42,9 +42,7 @@ export function Header() {
                 {/* Left: Logo & Nav */}
                 <div className="flex items-center gap-8">
                     <Link href="/" className="flex items-center gap-2 group">
-                        <div className="w-9 h-9 bg-gradient-to-br from-blue-600 to-violet-600 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
-                            O
-                        </div>
+                        <img src="/logo.svg" alt="OrbIdSwap" className="w-9 h-9 sm:w-10 sm:h-10 group-hover:scale-105 transition-transform" />
                         <span className="text-xl font-bold tracking-tight text-gray-900 dark:text-white hidden sm:block">OrbIdSwap</span>
                     </Link>
 
