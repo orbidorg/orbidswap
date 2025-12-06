@@ -10,6 +10,7 @@ import { TokenSelectorModal } from './TokenSelectorModal'
 import { SettingsModal } from './SettingsModal'
 import { useDebounce } from '../hooks/useDebounce'
 import { motion } from 'framer-motion'
+import { TokenIcon } from './TokenIcon'
 
 export function SwapCard() {
     const { address, isConnected } = useAccount()
@@ -317,9 +318,7 @@ export function SwapCard() {
                                 onClick={() => openTokenSelector('sell')}
                                 className="flex items-center gap-2 bg-white dark:bg-[#293249] hover:bg-gray-100 dark:hover:bg-[#404a67] text-gray-900 dark:text-white px-3 py-1.5 rounded-full transition-colors shrink-0 shadow-sm dark:shadow-none"
                             >
-                                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-[10px] font-bold">
-                                    {sellToken.symbol[0]}
-                                </div>
+                                <TokenIcon symbol={sellToken.symbol} size={24} />
                                 <span className="font-semibold text-lg">{sellToken.symbol}</span>
                                 <FiArrowDown size={16} />
                             </button>
@@ -330,11 +329,24 @@ export function SwapCard() {
                         </div>
                     </div>
 
-                    {/* Arrow Separator */}
+                    {/* Arrow Separator - Click to swap tokens */}
                     <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-                        <div className="bg-gray-50 dark:bg-[#131a2a] p-1.5 rounded-xl border-[4px] border-white dark:border-[#0d111c]">
+                        <button
+                            onClick={() => {
+                                if (buyToken) {
+                                    const tempToken = sellToken
+                                    setSellToken(buyToken)
+                                    setBuyToken(tempToken)
+                                    const tempAmount = sellAmount
+                                    setSellAmount(buyAmount)
+                                    setBuyAmount(tempAmount)
+                                }
+                            }}
+                            disabled={!buyToken}
+                            className="bg-gray-50 dark:bg-[#131a2a] p-1.5 rounded-xl border-[4px] border-white dark:border-[#0d111c] hover:bg-gray-100 dark:hover:bg-[#293249] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
                             <FiArrowDown size={20} className="text-gray-500 dark:text-[#98a1c0]" />
-                        </div>
+                        </button>
                     </div>
 
                     {/* Buy Input */}
@@ -355,9 +367,7 @@ export function SwapCard() {
                                     onClick={() => openTokenSelector('buy')}
                                     className="flex items-center gap-2 bg-white dark:bg-[#293249] hover:bg-gray-100 dark:hover:bg-[#404a67] text-gray-900 dark:text-white px-3 py-1.5 rounded-full transition-colors shrink-0 shadow-sm dark:shadow-none"
                                 >
-                                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-[10px] font-bold">
-                                        {buyToken.symbol[0]}
-                                    </div>
+                                    <TokenIcon symbol={buyToken.symbol} size={24} />
                                     <span className="font-semibold text-lg">{buyToken.symbol}</span>
                                     <FiArrowDown size={16} />
                                 </button>
@@ -388,6 +398,7 @@ export function SwapCard() {
                 isOpen={isTokenSelectorOpen}
                 onClose={() => setIsTokenSelectorOpen(false)}
                 onSelect={handleTokenSelect}
+                excludeToken={selectorMode === 'sell' ? buyToken?.symbol : sellToken.symbol}
             />
 
             <SettingsModal
