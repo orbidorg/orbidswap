@@ -190,4 +190,4 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 ---
 
-Built with ❤️ for the World Chain ecosystem
+Built with ❤️ in Colombia 🇨🇴 for the World Chain ecosystem
