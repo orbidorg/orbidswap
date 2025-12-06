@@ -9,9 +9,12 @@ import { FACTORY_ADDRESS, FACTORY_ABI, PAIR_ABI, WETH_ADDRESS } from '@/config/c
 import { formatUnits } from 'viem'
 import { useEffect, useState } from 'react'
 import { Footer } from '@/components/Footer'
+import { useTokenPrices } from '@/hooks/useTokenPrices'
+import { TOKEN_ICONS } from '@/config/tokenIcons'
 
 export default function LandingPage() {
   const [tvlEth, setTvlEth] = useState('0')
+  const { prices } = useTokenPrices()
 
   // 1. Total Pairs
   const { data: allPairsLength } = useReadContract({
@@ -151,9 +154,29 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="flex-1 p-6 flex flex-col items-center">
-              <div className="text-gray-500 dark:text-[#98a1c0] text-xs uppercase tracking-widest font-semibold mb-2">Gas (Gwei)</div>
-              <div className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">{gasPrice ? formatUnits(gasPrice, 9).slice(0, 4) : '0'}</div>
+              <div className="text-gray-500 dark:text-[#98a1c0] text-xs uppercase tracking-widest font-semibold mb-2">Market</div>
+              <div className="flex flex-col gap-1 items-center">
+                <div className="flex items-center gap-1.5">
+                  <img src={TOKEN_ICONS.WLD} className="w-4 h-4 rounded-full" alt="WLD" />
+                  <span className="font-bold text-gray-900 dark:text-white">${prices['WLD']?.toFixed(2) || '...'}</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <img src={TOKEN_ICONS.WETH} className="w-4 h-4 rounded-full" alt="WETH" />
+                  <span className="font-medium text-sm text-gray-500">${prices['WETH']?.toFixed(2) || '...'}</span>
+                </div>
+              </div>
             </div>
+            <a
+              href="https://worldscan.org/gastracker"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 p-6 flex flex-col items-center hover:bg-gray-50 dark:hover:bg-[#293249]/30 transition-colors cursor-pointer group"
+            >
+              <div className="text-gray-500 dark:text-[#98a1c0] text-xs uppercase tracking-widest font-semibold mb-2 group-hover:text-blue-500 transition-colors">Gas (Gwei)</div>
+              <div className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                {gasPrice ? (Number(formatUnits(gasPrice, 9)) < 0.01 ? '<0.01' : Number(formatUnits(gasPrice, 9)).toFixed(2)) : '...'}
+              </div>
+            </a>
           </div>
         </motion.div>
 

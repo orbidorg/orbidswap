@@ -10,7 +10,8 @@ export const TOKEN_ICONS: Record<string, string> = {
     // Stablecoins
     USDC: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png',
     USDT: 'https://s2.coinmarketcap.com/static/img/coins/64x64/825.png',
-    DAI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/4943.png',
+    // DAI removed, sDAI uses DAI icon usually or we get sDAI specific
+    SDAI: 'https://s2.coinmarketcap.com/static/img/coins/64x64/28356.png', // sDAI icon (Key must be uppercase for lookup)
 
     // Major cryptos
     BTC: 'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',

@@ -11,10 +11,12 @@ import { SettingsModal } from './SettingsModal'
 import { useDebounce } from '../hooks/useDebounce'
 import { motion } from 'framer-motion'
 import { TokenIcon } from './TokenIcon'
+import { useTokenPrices } from '../hooks/useTokenPrices'
 
 export function SwapCard() {
     const { address, isConnected } = useAccount()
     const { connect, connectors } = useConnect()
+    const { prices } = useTokenPrices()
 
     const handleConnect = () => {
         const injectedConnector = connectors.find(c => c.id === 'injected') || connectors[0]
@@ -324,7 +326,11 @@ export function SwapCard() {
                             </button>
                         </div>
                         <div className="flex justify-between mt-2">
-                            <span className="text-gray-500 dark:text-[#5d6785] text-sm">$0.00</span>
+                            <span className="text-gray-500 dark:text-[#5d6785] text-sm">
+                                {sellAmount && prices[sellToken.symbol]
+                                    ? `~$${(parseFloat(sellAmount) * prices[sellToken.symbol]).toFixed(2)}`
+                                    : '$0.00'}
+                            </span>
                             <span className="text-gray-500 dark:text-[#5d6785] text-sm">Balance: {parseFloat(getBalance(sellToken, ethBalance, sellTokenBalance)).toFixed(4)}</span>
                         </div>
                     </div>
@@ -382,7 +388,11 @@ export function SwapCard() {
                             )}
                         </div>
                         <div className="flex justify-between mt-2">
-                            <span className="text-gray-500 dark:text-[#5d6785] text-sm">$0.00</span>
+                            <span className="text-gray-500 dark:text-[#5d6785] text-sm">
+                                {buyAmount && buyToken && prices[buyToken.symbol]
+                                    ? `~$${(parseFloat(buyAmount) * prices[buyToken.symbol]).toFixed(2)}`
+                                    : '$0.00'}
+                            </span>
                             <span className="text-gray-500 dark:text-[#5d6785] text-sm">Balance: {parseFloat(getBalance(buyToken, ethBalance, buyTokenBalance)).toFixed(4)}</span>
                         </div>
                     </div>
