@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { FiSettings, FiArrowDown, FiInfo } from 'react-icons/fi'
 import { useAccount, useConnect, useBalance, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
-import { injected } from 'wagmi/connectors'
 import { formatUnits, parseUnits } from 'viem'
 import { toast } from 'react-hot-toast'
 import { ERC20_ABI, ROUTER_ADDRESS, ROUTER_ABI, WETH_ADDRESS } from '../config/contracts'
@@ -14,7 +13,14 @@ import { motion } from 'framer-motion'
 
 export function SwapCard() {
     const { address, isConnected } = useAccount()
-    const { connect } = useConnect()
+    const { connect, connectors } = useConnect()
+
+    const handleConnect = () => {
+        const injectedConnector = connectors.find(c => c.id === 'injected') || connectors[0]
+        if (injectedConnector) {
+            connect({ connector: injectedConnector })
+        }
+    }
 
     const [sellAmount, setSellAmount] = useState('')
     const [buyAmount, setBuyAmount] = useState('')
@@ -217,7 +223,7 @@ export function SwapCard() {
         if (!isConnected) {
             return (
                 <button
-                    onClick={() => connect({ connector: injected() })}
+                    onClick={handleConnect}
                     className="w-full bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white font-semibold text-base py-4 rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-blue-500/20"
                 >
                     Connect Wallet

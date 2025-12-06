@@ -1,7 +1,6 @@
 'use client'
 
-import { useAccount, useConnect, useDisconnect } from 'wagmi'
-import { injected } from 'wagmi/connectors'
+import { useAccount, useConnect } from 'wagmi'
 import { FiSearch, FiMenu, FiX, FiChevronDown } from 'react-icons/fi'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
@@ -11,7 +10,7 @@ import { Spotlight, Magnetic } from './Spotlight'
 
 export function Header() {
     const { isConnected } = useAccount()
-    const { connect } = useConnect()
+    const { connect, connectors } = useConnect()
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
     const [scrolled, setScrolled] = useState(false)
 
@@ -28,6 +27,13 @@ export function Header() {
         { name: 'Explore', href: '/explore' },
         { name: 'Pool', href: '/pool' },
     ]
+
+    const handleConnect = () => {
+        const injectedConnector = connectors.find(c => c.id === 'injected') || connectors[0]
+        if (injectedConnector) {
+            connect({ connector: injectedConnector })
+        }
+    }
 
     return (
         <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'glass border-b border-gray-200/50 dark:border-[#293249]/50 py-3' : 'bg-transparent py-5'}`}>
@@ -89,7 +95,7 @@ export function Header() {
                     ) : (
                         <Magnetic strength={0.2}>
                             <button
-                                onClick={() => connect({ connector: injected() })}
+                                onClick={handleConnect}
                                 className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white font-medium text-sm rounded-full transition-all hover:shadow-lg hover:shadow-blue-500/25 active:scale-95"
                             >
                                 Connect Wallet

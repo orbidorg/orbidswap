@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { Toaster } from 'react-hot-toast';
 
@@ -18,8 +20,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} font-sans`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.variable} font-sans bg-white dark:bg-[#0d111c] text-gray-900 dark:text-white`}>
         <Providers>
           {children}
           <Toaster
@@ -33,7 +35,10 @@ export default function RootLayout({
             }}
           />
         </Providers>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
 }
+
