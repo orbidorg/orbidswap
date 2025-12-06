@@ -68,7 +68,7 @@ export function UserWalletPanel() {
                                 <GradientIdenticon address={address} size={40} />
                                 <div>
                                     <div className="text-gray-900 dark:text-white font-bold">{shortAddress}</div>
-                                    <div className="text-gray-400 dark:text-[#5d6785] text-xs">World Chain</div>
+                                    <div className="text-gray-400 dark:text-[#5d6785] text-xs">World Chain Sepolia</div>
                                 </div>
                             </div>
                             <button onClick={() => setIsOpen(false)} className="text-gray-400 dark:text-[#5d6785] hover:text-gray-900 dark:hover:text-white p-1 hover:bg-gray-100 dark:hover:bg-[#293249] rounded-lg transition-colors">

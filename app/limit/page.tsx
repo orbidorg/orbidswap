@@ -8,6 +8,7 @@ import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import { TokenSelectorModal } from '@/components/TokenSelectorModal'
 import { SettingsModal } from '@/components/SettingsModal'
+import { TokenIcon } from '@/components/TokenIcon'
 
 export default function LimitPage() {
     const { address, isConnected } = useAccount()
@@ -117,9 +118,7 @@ export default function LimitPage() {
                                     onClick={() => openTokenSelector('sell')}
                                     className="flex items-center gap-2 bg-white dark:bg-[#293249] hover:bg-gray-100 dark:hover:bg-[#404a67] text-gray-900 dark:text-white px-4 py-2 rounded-full transition-colors shrink-0 shadow-sm"
                                 >
-                                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-xs font-bold text-white">
-                                        {sellToken.symbol[0]}
-                                    </div>
+                                    <TokenIcon symbol={sellToken.symbol} size={24} />
                                     <span className="font-semibold text-lg">{sellToken.symbol}</span>
                                     <FiArrowDown size={16} />
                                 </button>
@@ -155,9 +154,7 @@ export default function LimitPage() {
                                         onClick={() => openTokenSelector('buy')}
                                         className="flex items-center gap-2 bg-white dark:bg-[#293249] hover:bg-gray-100 dark:hover:bg-[#404a67] text-gray-900 dark:text-white px-4 py-2 rounded-full transition-colors shrink-0 shadow-sm"
                                     >
-                                        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-xs font-bold text-white">
-                                            {buyToken.symbol[0]}
-                                        </div>
+                                        <TokenIcon symbol={buyToken.symbol} size={24} />
                                         <span className="font-semibold text-lg">{buyToken.symbol}</span>
                                         <FiArrowDown size={16} />
                                     </button>
@@ -199,8 +196,8 @@ export default function LimitPage() {
                                     key={time}
                                     onClick={() => setExpiry(time)}
                                     className={`flex-1 py-3 rounded-xl font-medium transition-colors ${expiry === time
-                                            ? 'bg-gradient-to-r from-blue-500 to-violet-500 text-white shadow-lg shadow-blue-500/25'
-                                            : 'bg-gray-100 dark:bg-[#0d111c] text-gray-600 dark:text-[#98a1c0] hover:bg-gray-200 dark:hover:bg-[#293249]'
+                                        ? 'bg-gradient-to-r from-blue-500 to-violet-500 text-white shadow-lg shadow-blue-500/25'
+                                        : 'bg-gray-100 dark:bg-[#0d111c] text-gray-600 dark:text-[#98a1c0] hover:bg-gray-200 dark:hover:bg-[#293249]'
                                         }`}
                                 >
                                     {time}
@@ -226,6 +223,7 @@ export default function LimitPage() {
                 isOpen={isTokenSelectorOpen}
                 onClose={() => setIsTokenSelectorOpen(false)}
                 onSelect={handleTokenSelect}
+                excludeToken={selectorMode === 'sell' ? buyToken?.symbol : sellToken.symbol}
             />
 
             <SettingsModal

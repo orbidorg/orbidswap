@@ -82,7 +82,7 @@ export function Footer() {
                 <p className="text-gray-400 dark:text-[#5d6785] text-xs">© 2025 OrbIdSwap Protocol. All rights reserved.</p>
                 <div className="flex items-center gap-2 text-gray-400 dark:text-[#5d6785] text-xs font-mono">
                     <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                    Operational on World Chain
+                    Operational on World Chain Sepolia
                 </div>
             </div>
         </footer>
