@@ -1,10 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import { FiGithub, FiTwitter, FiBook, FiMessageCircle, FiGlobe } from 'react-icons/fi'
+import { FiGithub, FiTwitter, FiBook, FiMessageCircle } from 'react-icons/fi'
 import { FaDiscord } from 'react-icons/fa'
-
-import { Spotlight } from './Spotlight'
+import { Spotlight, Magnetic } from './Spotlight'
 
 export function Footer() {
     return (
@@ -22,22 +21,28 @@ export function Footer() {
                         The native liquidity layer for World Chain. <br />
                         Empowering the next generation of human-centric DeFi.
                     </p>
-                    <div className="flex gap-4">
-                        <Spotlight className="rounded-full">
-                            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gray-100 dark:bg-[#131a2a] flex items-center justify-center text-gray-500 dark:text-[#98a1c0] hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all relative z-10">
-                                <FiTwitter size={18} />
-                            </a>
-                        </Spotlight>
-                        <Spotlight className="rounded-full">
-                            <a href="https://github.com/orbidorg/orbidswap" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gray-100 dark:bg-[#131a2a] flex items-center justify-center text-gray-500 dark:text-[#98a1c0] hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all relative z-10">
-                                <FiGithub size={18} />
-                            </a>
-                        </Spotlight>
-                        <Spotlight className="rounded-full">
-                            <a href="https://discord.com" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-gray-100 dark:bg-[#131a2a] flex items-center justify-center text-gray-500 dark:text-[#98a1c0] hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all relative z-10">
-                                <FaDiscord size={18} />
-                            </a>
-                        </Spotlight>
+                    <div className="flex gap-3">
+                        <Magnetic strength={0.3}>
+                            <Spotlight className="rounded-full" color="rgba(29, 161, 242, 0.3)">
+                                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-11 h-11 rounded-full bg-gray-100 dark:bg-[#131a2a] flex items-center justify-center text-gray-500 dark:text-[#98a1c0] hover:bg-[#1DA1F2] hover:text-white transition-all relative z-10">
+                                    <FiTwitter size={18} />
+                                </a>
+                            </Spotlight>
+                        </Magnetic>
+                        <Magnetic strength={0.3}>
+                            <Spotlight className="rounded-full" color="rgba(255, 255, 255, 0.2)">
+                                <a href="https://github.com/orbidorg/orbidswap" target="_blank" rel="noopener noreferrer" className="w-11 h-11 rounded-full bg-gray-100 dark:bg-[#131a2a] flex items-center justify-center text-gray-500 dark:text-[#98a1c0] hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all relative z-10">
+                                    <FiGithub size={18} />
+                                </a>
+                            </Spotlight>
+                        </Magnetic>
+                        <Magnetic strength={0.3}>
+                            <Spotlight className="rounded-full" color="rgba(88, 101, 242, 0.3)">
+                                <a href="https://discord.com" target="_blank" rel="noopener noreferrer" className="w-11 h-11 rounded-full bg-gray-100 dark:bg-[#131a2a] flex items-center justify-center text-gray-500 dark:text-[#98a1c0] hover:bg-[#5865F2] hover:text-white transition-all relative z-10">
+                                    <FaDiscord size={18} />
+                                </a>
+                            </Spotlight>
+                        </Magnetic>
                     </div>
                 </div>
 

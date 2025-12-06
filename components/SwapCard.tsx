@@ -371,12 +371,12 @@ export function SwapCard() {
                         </div>
                     </div>
                 </div>
-            </motion.div>
 
-            {/* Action Button */}
-            <div className="mt-2">
-                {renderActionButton()}
-            </div>
+                {/* Action Button - Inside Card */}
+                <div className="px-4 pb-4 pt-2">
+                    {renderActionButton()}
+                </div>
+            </motion.div>
 
             <TokenSelectorModal
                 isOpen={isTokenSelectorOpen}

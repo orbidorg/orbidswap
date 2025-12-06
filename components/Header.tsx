@@ -7,8 +7,7 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { UserWalletPanel } from './UserWalletPanel'
 import { ThemeToggle } from './ThemeToggle'
-
-import { Spotlight } from './Spotlight'
+import { Spotlight, Magnetic } from './Spotlight'
 
 export function Header() {
     const { isConnected } = useAccount()
@@ -45,7 +44,7 @@ export function Header() {
                     {/* Desktop Nav */}
                     <nav className="hidden md:flex items-center gap-1 bg-gray-100/50 dark:bg-[#131a2a]/50 p-1 rounded-full border border-gray-200/50 dark:border-[#293249]/50 backdrop-blur-sm">
                         {navLinks.map((link) => (
-                            <Spotlight key={link.name} className="rounded-full">
+                            <Spotlight key={link.name} className="rounded-full" color="rgba(76, 130, 251, 0.25)">
                                 <Link
                                     href={link.href}
                                     className="block px-4 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-white/50 dark:hover:bg-[#293249]/50 rounded-full transition-all relative z-10"
@@ -59,19 +58,19 @@ export function Header() {
 
                 {/* Center: Search (Desktop) */}
                 <div className="hidden md:flex flex-1 max-w-sm mx-8">
-                    <div className="relative w-full group">
-                        <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gray-400 dark:text-[#98a1c0] group-focus-within:text-blue-500 transition-colors">
+                    <Spotlight className="relative w-full rounded-full" color="rgba(76, 130, 251, 0.2)">
+                        <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gray-400 dark:text-[#98a1c0] group-focus-within:text-blue-500 transition-colors z-10">
                             <FiSearch size={16} />
                         </div>
                         <input
                             type="text"
                             placeholder="Search tokens..."
-                            className="w-full bg-gray-100/50 dark:bg-[#131a2a]/50 border border-transparent hover:border-gray-200 dark:hover:border-[#293249] focus:bg-white dark:focus:bg-[#0d111c] rounded-full py-2 pl-10 pr-4 text-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-[#98a1c0] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                            className="w-full bg-gray-100/50 dark:bg-[#131a2a]/50 border border-transparent hover:border-gray-200 dark:hover:border-[#293249] focus:bg-white dark:focus:bg-[#0d111c] rounded-full py-2 pl-10 pr-4 text-sm text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-[#98a1c0] focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all relative z-10"
                         />
-                        <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                        <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none z-10">
                             <span className="text-[10px] font-mono text-gray-400 dark:text-gray-600 border border-gray-200 dark:border-gray-700 rounded px-1.5 py-0.5">/</span>
                         </div>
-                    </div>
+                    </Spotlight>
                 </div>
 
                 {/* Right: Wallet & Mobile Menu */}
@@ -88,12 +87,14 @@ export function Header() {
                     {isConnected ? (
                         <UserWalletPanel />
                     ) : (
-                        <button
-                            onClick={() => connect({ connector: injected() })}
-                            className="px-5 py-2 bg-black dark:bg-white hover:bg-gray-800 dark:hover:bg-gray-100 text-white dark:text-black font-medium text-sm rounded-full transition-all hover:scale-105 active:scale-95 shadow-lg shadow-black/5 dark:shadow-white/5"
-                        >
-                            Connect Wallet
-                        </button>
+                        <Magnetic strength={0.2}>
+                            <button
+                                onClick={() => connect({ connector: injected() })}
+                                className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white font-medium text-sm rounded-full transition-all hover:shadow-lg hover:shadow-blue-500/25 active:scale-95"
+                            >
+                                Connect Wallet
+                            </button>
+                        </Magnetic>
                     )}
 
                     {/* Mobile Menu Button */}
